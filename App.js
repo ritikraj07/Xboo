@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { ThemeProvider, createTheme } from '@rneui/themed';
-
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from './Source/Screen/Home';
@@ -22,6 +22,7 @@ export default function App() {
   });
 
   return (
+    <SafeAreaView style={{ flex: 1, paddingBottom:10}}> 
     <ThemeProvider theme={theme}>
       <StatusBar style="auto" />
       <NavigationContainer>
@@ -33,5 +34,6 @@ export default function App() {
         </Tab.Navigator>
       </NavigationContainer>
     </ThemeProvider>
+     </SafeAreaView>
   );
 }
