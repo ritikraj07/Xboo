@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingHorizontal: 1,
         paddingHorizontal: 10,
-
+        height:1200
     },
     searchInputView: {
         flex: 1,
