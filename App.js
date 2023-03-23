@@ -41,9 +41,9 @@ export default function App() {
                   <Icon name="home" type='octicons' color={color} size={size} />
               }}
             />
-            <Tab.Screen name="Product" component={Product} 
+            <Tab.Screen name="Category" component={Product} 
               options={{
-                tabBarLabel: "Product",
+                tabBarLabel: "Category",
                 tabBarIcon: ({ color, size }) =>
                   <Icon name="shopping-bag-1" type='fontisto' color={color} size={size} />
               }}
