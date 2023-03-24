@@ -49,10 +49,10 @@ export default PhoneOtp = ({phone}) => {
           backgroundColor: "white",
         }}
       >
-        <Text style={{fontWeight:500}}>Please Enter the verification Code we've sent you on +91-{phone}</Text>
+        <Text style={{fontWeight:500, fontSize:15}}>Please Enter the verification Code we've sent you on +91-{phone}</Text>
         
             <TextInput editable maxLength={6} keyboardType="numeric" onChangeText={text => onChangeText(text)}
-        value={value} style={{letterSpacing:40, borderBottomWidth:0.5, paddingLeft:15, marginBottom:20}}/>
+        value={value} style={{letterSpacing:35, fontSize:20, borderBottomWidth:0.5, paddingLeft:10, marginVertical:40}}/>
          <Button title="Continue" disabled={value.length===6?false:true} />
         </View>
 
