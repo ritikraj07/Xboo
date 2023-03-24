@@ -9,14 +9,36 @@ import {
   ScrollView,
   TextInput,
 } from "react-native";
+
 import { useNavigation } from "@react-navigation/native";
 import { Button } from "@rneui/themed";
 import { Entypo } from "@expo/vector-icons";
+import auth from '@react-native-firebase/auth';
 
-export default SignUp = () => {
-  const [value, onChangeText] = React.useState("");
+export default EmailAuth = () => {
+  const [email, onChangeText] = React.useState("");
+  const [pass, onChangepass] = React.useState("");
   const navigation=useNavigation();
+
+  const SignIn=()=>{
+    auth()
+    .createUserWithEmailAndPassword(email, pass)
+    .then(() => {
+      console.log('User account created & signed in!');
+    })
+    .catch(error => {
+      if (error.code === 'auth/email-already-in-use') {
+        console.log('That email address is already in use!');
+      }
   
+      if (error.code === 'auth/invalid-email') {
+        console.log('That email address is invalid!');
+      }
+  
+      console.error(error);
+    });
+  }
+
   return (
     <ScrollView>
     <ImageBackground
@@ -51,32 +73,42 @@ export default SignUp = () => {
         }}
       >
         <Text style={{fontWeight:500}}>Log in for the Best Experience</Text>
-        <Text style={{paddingBottom:30, fontSize:12,paddingTop:10}}>Enter your Phone number to continue</Text>
+        <Text style={{paddingBottom:30, fontSize:12,paddingTop:10}}>Enter your Email & Password to continue</Text>
         
+        <View style={{paddingBottom:25}}>
+          <View style={styles.labelContainer}>
+            <Text style={{ color: "#73BACD", fontWeight: 500 }}>
+              Email ID
+            </Text>
+          </View>
+          
+          <View style={styles.inputContainer}>
+           
+            <TextInput placeholder="Enter email address" onChangeText={text => onChangeText(text)}
+        value={email}/>
+          </View>
+        </View>
         <View>
           <View style={styles.labelContainer}>
             <Text style={{ color: "#73BACD", fontWeight: 500 }}>
-              Phone Number
+              Password
             </Text>
           </View>
           <View style={styles.inputContainer}>
-            <Text style={{ marginRight: 15, paddingTop: 5, fontWeight: 500 }}>
-              {"+91"}
-            </Text>
-            <TextInput placeholder="Enter Phone Number" editable maxLength={10}keyboardType="numeric" onChangeText={text => onChangeText(text)}
-        value={value}/>
+        
+            <TextInput placeholder="Enter Password"  onChangeText={text => onChangepass(text)}
+        value={pass}/>
           </View>
         </View>
         <TouchableOpacity onPress={() =>
-        navigation.navigate('EmailAuth')
+        navigation.navigate('SignUp')
       }>
-        <Text style={{alignSelf:"flex-end", color: "#73BACD", paddingVertical:10}}>Use E-mail ID</Text>
+        <Text style={{alignSelf:"flex-end", color: "#73BACD", paddingVertical:10}}>Use Phone Number</Text>
         </TouchableOpacity>
         
         <Text style={{fontSize:12, paddingVertical:20}}>By continuing, you agree to Flipkart's <Text style={{color:"blue"}}>Terms of Use</Text> and <Text style={{color:"blue"}}>Privacy Policy</Text></Text>
-        <Button title="Continue" disabled={value.length===10?false:true}  onPress={() =>
-        navigation.navigate('PhoneOtp', {value})
-      }/>
+        <Button title="Continue" disabled={pass.length>6?false:true}  onPress={SignIn}
+      />
         </View>
 
     </ImageBackground>
