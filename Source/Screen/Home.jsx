@@ -1,30 +1,39 @@
-import {useState} from 'react';
-import { View, ScrollView, StyleSheet, Image, TouchableOpacity, Text } from 'react-native'
+import { useRef, useEffect, useState } from 'react';
+import { View, ScrollView, StyleSheet, Image, TouchableOpacity, Text, Animated, Dimensions } from 'react-native'
 import { Icon } from '@rneui/themed';
 import SearchCom from '../Components/SearchCom';
 import SlliderBanner from '../Components/SlliderBanner';
 import Posters from '../Components/Posters';
 import GridPoster from '../Components/GridPoster';
+import Notification from '../Components/Notification';
+const phWidth = Dimensions.get('window').width;
 
-
-function Home(props) {
+function Home({navigation}) {
     const [no_of_notification, set_no_of_notification] = useState(0)
+    const Hpadding = useRef(new Animated.Value(0)).current;
+    const wid = useRef(new Animated.Value(0)).current;
+    
+    function on() {
+        Animated.spring(Hpadding, { toValue: 10 }).start()
+        Animated.spring(wid, { toValue: phWidth-102 }).start()
+    }
+    function off() {
+        Animated.spring(Hpadding, { toValue: 0 }).start()
+        Animated.spring(wid, { toValue: 0 }).start()
+    }
 
     
-
-
-
     return (
 
         <View style={styles.homeContanier}>
-
+            <Notification Hpadding={Hpadding} wid={wid} off={off} />
             <View style={styles.banner}>
                 <Image source={require('./logo2.png')} style={{ width: 120, height: 60, marginRight: 0 }} />
                 <View style={{ flexDirection: 'row', width:60, justifyContent:'space-between'}} >
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('SearchCom')} >
                         <Icon name='search' type='feather' />
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ position: 'relative' }} >
+                    <TouchableOpacity style={{ position: 'relative' }} onPress={()=>on()} >
                         <Icon name='bell' type='feather' size={23} />
                         <Text style={{ position: 'absolute', color: 'green', fontSize: 18, fontWeight: 800, bottom: '50%', right: '50%' }} >{no_of_notification }</Text>
                     </TouchableOpacity>
@@ -55,7 +64,8 @@ function Home(props) {
 const styles = StyleSheet.create({
     homeContanier: {
         flex: 1,
-        backgroundColor: 'white'
+        position:'relative'
+
     },
     banner: {
         flexDirection: 'row',
