@@ -21,7 +21,7 @@ function GridPoster({ offerName, link = 'https://flipkart-data.onrender.com/best
                     width: 80, height: 80,
                 }}
             />
-            <Text h5  >{item.description.length > 20 ? item.description.substring(0, 20) : item.description} </Text>
+            <Text h5  >{item.description.length > 20 ? item.description.substring(0, 20)+ "..." : item.description} </Text>
             <Text>Discount: {item.discount}% </Text>
         </TouchableOpacity>)
     }
@@ -33,6 +33,7 @@ function GridPoster({ offerName, link = 'https://flipkart-data.onrender.com/best
                 data={data}
                 renderItem={({ item }) => <Poster item={item} />}
                 numColumns={3}
+                scrollEnabled={false}
             />
         </ImageBackground>
     );

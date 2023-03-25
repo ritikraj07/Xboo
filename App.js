@@ -3,7 +3,6 @@ import { ThemeProvider, createTheme } from '@rneui/themed';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View } from 'react-native';
 import { Icon } from '@rneui/themed';
 import Home from './Source/Screen/Home';
 import Product from './Source/Screen/Product';
@@ -58,12 +57,14 @@ function BottomTabs() {
 }
 
 function MyStack() {
-  return (<Stack.Navigator screenOptions={{ headerShown: false}}>
+  return (<Stack.Navigator screenOptions={{ headerShown: false }}>
+    
     <Stack.Screen name="BottomTab" component={BottomTabs} />
     <Stack.Screen name="SearchCom" component={SearchCom} />
     <Stack.Screen name="SignUp" component={SignUp} />
     <Stack.Screen name="PhoneOtp" component={PhoneOtp} />
     <Stack.Screen name="EmailAuth" component={EmailAuth} />
+    
   </Stack.Navigator>)
 }
 

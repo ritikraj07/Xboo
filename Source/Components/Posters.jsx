@@ -20,7 +20,7 @@ function Posters({ link = 'https://flipkart-data.onrender.com/bestselling', back
                    width: 100, height:100,
                }}
             />
-            <Text h5 >{item.description.length > 20 ? item.description.substring(0,20) : item.description} </Text>
+            <Text h5 >{item.description.length > 20 ? item.description.substring(0,20)+ "..." : item.description} </Text>
             <Text>Discount: {item.discount}% </Text>
         </TouchableOpacity>)
     }
@@ -31,6 +31,7 @@ function Posters({ link = 'https://flipkart-data.onrender.com/bestselling', back
                 data={data}
                 renderItem={({ item }) => <PostElement item={item} />}
                 horizontal
+                scrollEnabled={false}
             />
         </ImageBackground>
     );
