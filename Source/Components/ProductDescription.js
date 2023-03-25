@@ -101,10 +101,10 @@ function ProductDescription({navigation}) {
      </View>
       <View style={{flexDirection:"row",flex:1}}>
         <TouchableOpacity style={{flex:1,height:40, paddingVertical:10}}>
-        <Text style={{alignSelf:"center", fontWeight:"bold",}}>Add to Cart</Text>
+        <Text style={{alignSelf:"center", fontSize:15, fontWeight:"bold",}}>Add to Cart</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{flex:1,backgroundColor:"orange", height:40, paddingVertical:10}}>
-        <Text style={{alignSelf:"center", fontWeight:"bold", color:"white"}}>Buy Now</Text>
+        <Text style={{alignSelf:"center",fontSize:15, fontWeight:"bold", color:"white"}}>Buy Now</Text>
         
         </TouchableOpacity>
       </View>
