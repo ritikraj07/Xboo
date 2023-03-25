@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import { View, Dimensions, StyleSheet, Image, TextInput, ImageBackground, TouchableOpacity } from 'react-native'
 import { Text, Icon } from '@rneui/themed';
-import { useNavigation } from '@react-navigation/native';
+
 const phWidth = Dimensions.get('window').width;
 function SearchCom({ navigation }) {
     const [search, setseach] = useState('')
