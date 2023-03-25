@@ -12,17 +12,17 @@ import { Feather, MaterialCommunityIcons,Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import ProductCard from "./ProductCard";
 
-function ProductList() {
+function ProductList({navigation}) {
    const route = useRoute();
    const {item} = route.params;
    const [product,setProduct]=React.useState([]);
-  const navigation=useNavigation();
- const search=item.category;
+ 
+ const search=item.search;
 
 React.useEffect(()=>{
-  fetch(`https://flipkart.dvishal485.workers.dev/search/${search}`)
+  fetch(`https://flipkart-data.onrender.com/${search}`)
   .then((res)=>res.json())
-  .then((data)=>setProduct(data.result))
+  .then((data)=>{setProduct(data)})
   .catch(err=>console.log(err));
 },[])
 
@@ -40,9 +40,9 @@ React.useEffect(()=>{
         style={style.headerView}
       >
         <View style={{ flexDirection: "row"}}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back-sharp" size={24} color="black" style={{ paddingTop: 2 }}/></TouchableOpacity>
-        <Text style={{ fontSize: 20, color: "black",fontWeight:500, paddingLeft: 10 }}>{search}</Text>
+        <Text style={{ fontSize: 20, color: "black",fontWeight:500, paddingLeft: 10 }}>{item.category}</Text>
         </View>
         <View style={{ flexDirection: "row", padding: 5 }}>
           <TouchableOpacity>
@@ -61,11 +61,14 @@ React.useEffect(()=>{
       </ImageBackground>
 
       
-     <View style={{flexWrap: "wrap",flexDirection:"row"}}>
-     {product.map((item)=>{
-        return (<ProductCard url={item.query_url} />)
-     })}
-
+     <View style={{flexDirection:"row",paddingHorizontal:5, width:"100%", justifyContent:"center",alignitems:"center"}}>
+     <FlatList
+        data={product}
+        renderItem={({item}) => <ProductCard item={item}/>}
+        scrollEnabled={false}
+        keyExtractor={item => item.item_id}
+        numColumns={2}
+      />
      </View>
       
    

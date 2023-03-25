@@ -17,7 +17,7 @@ import SignUp from './Source/SignIn/SignUp';
 import PhoneOtp from './Source/SignIn/PhoneOtp';
 import EmailAuth from './Source/SignIn/EmailAuth';
 import ProductList from './Source/Components/ProductList';
-
+import ProductDescription from './Source/Components/ProductDescription';
 
 
 function BottomTabs() {
@@ -67,6 +67,7 @@ function MyStack() {
     <Stack.Screen name="PhoneOtp" component={PhoneOtp} />
     <Stack.Screen name="EmailAuth" component={EmailAuth} />
     <Stack.Screen name="productList" component={ProductList} />
+    <Stack.Screen name="productdesc" component={ProductDescription} />
     
   </Stack.Navigator>)
 }
