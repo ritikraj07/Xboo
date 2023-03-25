@@ -15,7 +15,7 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 import SignUp from './Source/SignIn/SignUp';
 import PhoneOtp from './Source/SignIn/PhoneOtp';
-
+import EmailAuth from './Source/SignIn/EmailAuth'
 
 
 function BottomTabs() {
