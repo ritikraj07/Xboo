@@ -1,18 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
   Image,
+  FlatList,
   StyleSheet,ImageBackground,
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
-import { moreCategory, category } from "../Data/category";
-import { useNavigation } from "@react-navigation/native";
+import { Feather, MaterialCommunityIcons,Ionicons } from "@expo/vector-icons";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import ProductCard from "./ProductCard";
 
-function Product(props) {
+function ProductList() {
+   const route = useRoute();
+   const {item} = route.params;
+   const [product,setProduct]=React.useState([]);
   const navigation=useNavigation();
+ const search=item.category;
+
+React.useEffect(()=>{
+  fetch(`https://flipkart.dvishal485.workers.dev/search/${search}`)
+  .then((res)=>res.json())
+  .then((data)=>setProduct(data.result))
+  .catch(err=>console.log(err));
+},[])
+
 
   return (
     <ScrollView>
@@ -26,7 +39,11 @@ function Product(props) {
       <View
         style={style.headerView}
       >
-        <Text style={{ fontSize: 20, color: "black",fontWeight:500, }}>All categories</Text>
+        <View style={{ flexDirection: "row"}}>
+            <TouchableOpacity>
+        <Ionicons name="arrow-back-sharp" size={24} color="black" style={{ paddingTop: 2 }}/></TouchableOpacity>
+        <Text style={{ fontSize: 20, color: "black",fontWeight:500, paddingLeft: 10 }}>{search}</Text>
+        </View>
         <View style={{ flexDirection: "row", padding: 5 }}>
           <TouchableOpacity>
             <Feather name="search" size={22} color="black" />
@@ -43,42 +60,20 @@ function Product(props) {
       </View>
       </ImageBackground>
 
-      <View style={style.containerView}>
-        {category.map((item, index) => {
-          return (
-            <TouchableOpacity key={index} style={style.TouchIcon} onPress={() =>
-              navigation.navigate('productList', {item})
-            }>
-              <Image source={{ uri: item.icon }} style={style.iconImage} />
-              <Text style={style.iconText}>{item.category}</Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
+      
+     <View style={{flexWrap: "wrap",flexDirection:"row"}}>
+     {product.map((item)=>{
+        return (<ProductCard url={item.query_url} />)
+     })}
 
-      <View style={{ padding: 10, paddingTop: 20 }}>
-        <View style={{ flexDirection: "row" }}>
-          <Text style={{ fontSize: 18,fontWeight:500, }}>More on Xcell</Text>
-          <View style={style.hLView}></View>
-        </View>
-        <View
-          style={style.containerView}
-        >
-          {moreCategory.map((item, index) => {
-            return (
-              <TouchableOpacity key={index} style={style.TouchIcon} >
-                <Image source={{ uri: item.icon }} style={style.iconImage} />
-                <Text style={style.iconText}>{item.category}</Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </View>
+     </View>
+      
+   
     </ScrollView>
   );
 }
 
-export default Product;
+export default ProductList;
 
 const style = StyleSheet.create({
     headerView:{
