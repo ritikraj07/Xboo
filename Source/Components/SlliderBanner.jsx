@@ -46,7 +46,7 @@ function SlliderBanner(props) {
     
 
     return (
-        <View style={{marginTop:10}}>
+        <View style={{ marginTop: 10 }}>
             <Slideshow dataSource={data}
                 position={position}  
                 onPositionChanged={pros => setposition(pros)}
