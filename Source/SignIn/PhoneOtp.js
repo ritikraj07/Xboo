@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   View,
   Text,
@@ -8,14 +8,34 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  Alert
 } from "react-native";
-
-
+import { useNavigation, useRoute } from "@react-navigation/native";
+import auth from '@react-native-firebase/auth';
 import { Button } from "@rneui/themed";
 import { Entypo } from "@expo/vector-icons";
 
 export default PhoneOtp = ({phone}) => {
-  const [value, onChangeText] = React.useState("");
+  const [otp, setotp] = React.useState("");
+  const route = useRoute();
+  const { confirm } = route.params;
+  const navigation = useNavigation();
+  async function confirmCode() {
+    try {
+      let ans = await confirm.confirm(otp);
+      console.log(ans)
+      Alert.alert('Sign In Successful', 'Lets Rock baby', [
+        {
+          text: 'Ok',
+          onPress: () => navigation.navigate('BottomTab'),
+          style: 'cancel',
+        },
+      ],)
+    } catch (error) {
+      console.log('Invalid code.');
+    }
+  }
+  
   return (
     <ScrollView>
     <ImageBackground
@@ -25,8 +45,10 @@ export default PhoneOtp = ({phone}) => {
       resizeMode="cover"
       style={{ flex: 1,height:1000}}
     >
-      <View style={{paddingVertical: 10 }}>
-        <Entypo name="cross" size={28} color="black" />
+        <View style={{ paddingVertical: 10 }}>
+          <TouchableOpacity onPress={()=>navigation.goBack()}>
+            <Entypo name="cross" size={28} color="black" />
+          </TouchableOpacity>
 
         <Image
           source={require("./logo.png")}
@@ -51,9 +73,9 @@ export default PhoneOtp = ({phone}) => {
       >
         <Text style={{fontWeight:500, fontSize:15}}>Please Enter the verification Code we've sent you on +91-{phone}</Text>
         
-            <TextInput editable maxLength={6} keyboardType="numeric" onChangeText={text => onChangeText(text)}
-        value={value} style={{letterSpacing:35, fontSize:20, borderBottomWidth:0.5, paddingLeft:10, marginVertical:40}}/>
-         <Button title="Continue" disabled={value.length===6?false:true} />
+            <TextInput editable maxLength={6} keyboardType="numeric" onChangeText={text => setotp(text)}
+        value={otp} style={{letterSpacing:35, fontSize:20, borderBottomWidth:0.5, paddingLeft:10, marginVertical:40}}/>
+         <Button title="Continue" disabled={otp.length===6?false:true} onPress={()=>confirmCode()} />
         </View>
 
     </ImageBackground>

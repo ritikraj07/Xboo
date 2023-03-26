@@ -7,41 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:691221303909:android:2d18ff5ecee9e41af12c8c",
-        "android_client_info": {
-          "package_name": "com.ritikraj07.Xcellence"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "691221303909-2upcj8699742857tpn784mcvrneqfmd4.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDeJW76QYl7wIGmvMn5dM2CbX0TnnoBsQU"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "691221303909-2upcj8699742857tpn784mcvrneqfmd4.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:691221303909:android:81d98ef2b9801cddf12c8c",
         "android_client_info": {
           "package_name": "com.ritikraj07.myapp"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "691221303909-qjc89nnkbs4ao25qk6g290g7c7oe8ppb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ritikraj07.myapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
         {
           "client_id": "691221303909-2upcj8699742857tpn784mcvrneqfmd4.apps.googleusercontent.com",
           "client_type": 3

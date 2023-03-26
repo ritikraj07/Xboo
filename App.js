@@ -58,12 +58,12 @@ function BottomTabs() {
 
 function MyStack() {
   return (<Stack.Navigator screenOptions={{ headerShown: false }}>
-    
+    <Stack.Screen name="EmailAuth" component={EmailAuth} />
     <Stack.Screen name="BottomTab" component={BottomTabs} />
     <Stack.Screen name="SearchCom" component={SearchCom} />
     <Stack.Screen name="SignUp" component={SignUp} />
     <Stack.Screen name="PhoneOtp" component={PhoneOtp} />
-    <Stack.Screen name="EmailAuth" component={EmailAuth} />
+    
     
   </Stack.Navigator>)
 }

@@ -49,7 +49,9 @@ export default EmailAuth = () => {
       style={{ flex: 1,height:1000}}
     >
       <View style={{paddingVertical: 10 }}>
-        <Entypo name="cross" size={28} color="black" />
+          <TouchableOpacity onPress={() => navigation.navigate("BottomTab")}>
+            <Entypo name="cross" size={28} color="black" />
+          </TouchableOpacity>
 
         <Image
           source={require("./logo.png")}
