@@ -14,7 +14,9 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 import SignUp from './Source/SignIn/SignUp';
 import PhoneOtp from './Source/SignIn/PhoneOtp';
-import EmailAuth from './Source/SignIn/EmailAuth'
+import EmailAuth from './Source/SignIn/EmailAuth';
+import ProductList from './Source/Components/ProductList';
+import ProductDescription from './Source/Components/ProductDescription';
 
 
 function BottomTabs() {
@@ -58,12 +60,14 @@ function BottomTabs() {
 
 function MyStack() {
   return (<Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="EmailAuth" component={EmailAuth} />
+    
     <Stack.Screen name="BottomTab" component={BottomTabs} />
     <Stack.Screen name="SearchCom" component={SearchCom} />
     <Stack.Screen name="SignUp" component={SignUp} />
     <Stack.Screen name="PhoneOtp" component={PhoneOtp} />
-    
+    <Stack.Screen name="EmailAuth" component={EmailAuth} />
+    <Stack.Screen name="productList" component={ProductList} />
+    <Stack.Screen name="productdesc" component={ProductDescription} />
     
   </Stack.Navigator>)
 }
