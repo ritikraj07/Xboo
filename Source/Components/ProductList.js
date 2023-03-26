@@ -11,6 +11,7 @@ import {
 import { Feather, MaterialCommunityIcons,Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import ProductCard from "./ProductCard";
+import FilterAndSortComponent from "./Filter";
 
 function ProductList({navigation}) {
    const route = useRoute();
@@ -59,8 +60,8 @@ React.useEffect(()=>{
         </View>
       </View>
       </ImageBackground>
-
-      
+     
+     
      <View style={{flexDirection:"row",paddingHorizontal:5, width:"100%", justifyContent:"center",alignitems:"center"}}>
      <FlatList
         data={product}

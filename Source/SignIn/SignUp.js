@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   View,
   Text,
@@ -8,15 +8,27 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from "@rneui/themed";
 import { Entypo } from "@expo/vector-icons";
+import auth from '@react-native-firebase/auth';
 
 export default SignUp = () => {
   const [value, onChangeText] = React.useState("");
-  const navigation=useNavigation();
-  
+  const navigation = useNavigation();
+  async function signInWithPhoneNumber(value) {
+    try {
+      const confirm = await auth().signInWithPhoneNumber(`+91${value}`);
+      navigation.navigate('PhoneOtp', { confirm })
+      console.log(confirm)
+    } catch (e) {
+      console.log(e)
+    }
+    
+  }
+
   return (
     <ScrollView>
     <ImageBackground
@@ -27,8 +39,9 @@ export default SignUp = () => {
       style={{ flex: 1,height:1000}}
     >
       <View style={{paddingVertical: 10 }}>
-        <Entypo name="cross" size={28} color="black" />
-
+          <TouchableOpacity onPress={() => navigation.navigate("BottomTab")}>
+            <Entypo name="cross" size={28} color="black" />
+          </TouchableOpacity>
         <Image
           source={require("./logo.png")}
           style={{
@@ -74,8 +87,11 @@ export default SignUp = () => {
         </TouchableOpacity>
         
         <Text style={{fontSize:12, paddingVertical:20}}>By continuing, you agree to Flipkart's <Text style={{color:"blue"}}>Terms of Use</Text> and <Text style={{color:"blue"}}>Privacy Policy</Text></Text>
-        <Button title="Continue" disabled={value.length===10?false:true}  onPress={() =>
-        navigation.navigate('PhoneOtp', {value})
+          <Button title="Continue"
+            disabled={value.length === 10 ? false : true}
+            onPress={() => {
+              signInWithPhoneNumber(value)
+          }
       }/>
         </View>
 
