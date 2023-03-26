@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { View, Image, ImageBackground, FlatList, TouchableOpacity } from 'react-native'
 import { Text } from '@rneui/themed';
+import { useNavigation } from '@react-navigation/core';
 
 function GridPoster({ offerName, link = 'https://flipkart-data.onrender.com/bestselling', background = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO9Veuno9ctginawyA90z8OzOFltYgo3b1TYRFWbSKCjllsL69Yuwl2LwumWA1GGgYWRs&usqp=CAU' }) {
     const [data, setdata] = useState([])
@@ -11,11 +12,14 @@ function GridPoster({ offerName, link = 'https://flipkart-data.onrender.com/best
                 setdata(res)
             })
     }, [])
+    const navigation = useNavigation();
     function Poster({item}) {
         return (<TouchableOpacity style={{
             borderRadius: 10, backgroundColor: 'white', width: 110,
             borderRadius: 5, margin: 5, alignItems: 'center', justifyContent: 'center', padding: 3, marginHorizontal: 10, borderWidth:1
-        }}>
+        }}
+            onPress={() => navigation.navigate('productdesc', { item })}
+        >
             <Image source={{ uri: item.image }}
                 style={{
                     width: 80, height: 80,
