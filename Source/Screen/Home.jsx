@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, Image, TouchableOpacity, Text, Animated, Dimensions } from 'react-native'
+import { View, ScrollView, StyleSheet, Image, TouchableOpacity,ImageBackground, Text, Animated, Dimensions } from 'react-native'
 import { Icon } from '@rneui/themed';
 import SearchCom from '../Components/SearchCom';
 import SlliderBanner from '../Components/SlliderBanner';
@@ -27,6 +27,13 @@ function Home({navigation}) {
 
         <View style={styles.homeContanier}>
             <Notification Hpadding={Hpadding} wid={wid} off={off} />
+            <ImageBackground
+      source={{
+        uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTU9R3q8guKFAt-fsNfc_7AN6a_o9tQxsAGXnbPDNbuvndQfusFQRHl3wCLAzGRIL0Pr_M&usqp=CAU",
+      }}
+      resizeMode="cover"
+      
+    >
             <View style={styles.banner}>
                 <Image source={require('./logo2.png')} style={{ width: 120, height: 60, marginRight: 0 }} />
                 <View style={{ flexDirection: 'row', width:60, justifyContent:'space-between'}} >
@@ -39,6 +46,7 @@ function Home({navigation}) {
                     </TouchableOpacity>
                 </View>
             </View>
+            </ImageBackground>
 
             <ScrollView>
                 <SlliderBanner />
