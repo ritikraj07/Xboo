@@ -58,7 +58,7 @@ export default EmailAuth = () => {
       style={{ flex: 1,height:1000}}
     >
       <View style={{paddingVertical: 10 }}>
-          <TouchableOpacity onPress={() => navigation.navigate("BottomTab")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
             <Entypo name="cross" size={28} color="black" />
           </TouchableOpacity>
 
