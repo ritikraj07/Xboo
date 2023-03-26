@@ -14,12 +14,12 @@ function Home({navigation}) {
     const wid = useRef(new Animated.Value(0)).current;
     
     function on() {
-        Animated.spring(Hpadding, { toValue: 10 }).start()
-        Animated.spring(wid, { toValue: phWidth-102 }).start()
+        Animated.spring(Hpadding, { toValue: 10, overshootClamping: true, useNativeDriver:false }).start()
+        Animated.spring(wid, { toValue: phWidth - 102, overshootClamping: true, useNativeDriver: false }).start()
     }
     function off() {
-        Animated.spring(Hpadding, { toValue: 0 }).start()
-        Animated.spring(wid, { toValue: 0 }).start()
+        Animated.spring(Hpadding, { toValue: 0, overshootClamping: true, useNativeDriver: false }).start()
+        Animated.spring(wid, { toValue: 0, overshootClamping: true, useNativeDriver: false }).start()
     }
 
     
