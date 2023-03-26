@@ -25,10 +25,19 @@ export default EmailAuth = () => {
     .createUserWithEmailAndPassword(email, pass)
     .then(() => {
       console.log('User account created & signed in!');
+      navigation.navigate('BottomTab')
     })
     .catch(error => {
       if (error.code === 'auth/email-already-in-use') {
         console.log('That email address is already in use!');
+        auth().signInWithEmailAndPassword(email, pass)
+          .then((res) => {
+            console.log(res)
+            navigation.navigate('BottomTab')
+          }).catch((res) => {
+            console(res)
+          })
+        
       }
   
       if (error.code === 'auth/invalid-email') {
@@ -86,7 +95,7 @@ export default EmailAuth = () => {
           
           <View style={styles.inputContainer}>
            
-            <TextInput placeholder="Enter email address" onChangeText={text => onChangeText(text)}
+              <TextInput style={{ width:'100%'}} placeholder="Enter email address" onChangeText={text => onChangeText(text)}
         value={email}/>
           </View>
         </View>
@@ -98,7 +107,7 @@ export default EmailAuth = () => {
           </View>
           <View style={styles.inputContainer}>
         
-            <TextInput placeholder="Enter Password"  onChangeText={text => onChangepass(text)}
+              <TextInput style={{ width: '100%' }} placeholder="Enter Password"  onChangeText={text => onChangepass(text)}
         value={pass}/>
           </View>
         </View>
