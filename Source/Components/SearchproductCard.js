@@ -83,12 +83,12 @@ export default function SearchProductCard({ item }) {
 
 const styles = StyleSheet.create({
   container: {
-    width: 175,
-    backgroundColor: "white",
+    width: '50%',
+    backgroundColor: 'white',
     paddingTop: 10,
-    padding: 5,
+    paddingHorizontal: 15,
     borderWidth: 0.5,
-    borderColor: "#EBEDF0",
+    borderColor: "#EBEDF0"
   },
   image: {
     width: 155,
