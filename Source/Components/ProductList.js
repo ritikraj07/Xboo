@@ -62,7 +62,7 @@ React.useEffect(()=>{
       </ImageBackground>
      
      
-     <View style={{flexDirection:"row",paddingHorizontal:5, width:"100%", justifyContent:"center",alignitems:"center"}}>
+     <View style={{width:"100%", justifyContent:"space-around",alignitems:"center",}}>
      <FlatList
         data={product}
         renderItem={({item}) => <ProductCard item={item}/>}

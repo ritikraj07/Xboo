@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,6 +9,7 @@ import {
   FlatList,
   ImageBackground,
   ScrollView,
+  Alert
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign } from 'react-native-vector-icons';
@@ -17,23 +18,48 @@ import { Entypo } from 'react-native-vector-icons';
 import { Ionicons } from 'react-native-vector-icons';
 import { FontAwesome5 } from 'react-native-vector-icons';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
-
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 const image = {
-  uri: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/8a96ef31-74a6-472d-854d-3a1d55adf24e/dbvjwkm-f6f2b5bc-f8c2-4d46-b7b3-4b3ce8956af7.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzhhOTZlZjMxLTc0YTYtNDcyZC04NTRkLTNhMWQ1NWFkZjI0ZVwvZGJ2andrbS1mNmYyYjViYy1mOGMyLTRkNDYtYjdiMy00YjNjZTg5NTZhZjcuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.0K2z0jofYltUO2gjCLEdisNgMODxb4RSd2-egyX1zqY',
+  uri: 'https://static.vecteezy.com/system/resources/previews/004/697/688/original/curve-light-blue-background-abstract-free-vector.jpg',
 };
 
-const Profile = () => {
-  const [name, setName] = useState('John Doe');
-  const [email, setEmail] = useState('johndoe@example.com');
-  const [phone, setPhone] = useState('555-555-5555');
+const Profile = ({ navigation }) => {
+  const [name, setName] = useState("Your name");
+  const [email, setEmail] = useState('yourmailId@example.com');
+  const [phone, setPhone] = useState('Your Phone Number');
   const [address, setAddress] = useState('123 Main St, Anytown USA');
   const [editMode, setEditMode] = useState(false);
   const [profilePic, setProfilePic] = useState(null);
+  const [Auth, setAuth] = useState(null)
   const [orders, setOrders] = useState([
     { id: '1', date: '2022-01-01', total: '100.00' },
     { id: '2', date: '2022-02-01', total: '200.00' },
     { id: '3', date: '2022-03-01', total: '300.00' },
   ]);
+
+  useEffect(() => {
+    let Auth = auth()._user
+    setAuth(Auth)
+    if (!Auth) {
+      Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kara phir istam kara",)
+      navigation.navigate('EmailAuth')
+    } else {
+      // firestore().collection(auth()?._user?.uid).doc('UserData').get()
+      //   .then((e) => {
+      //     // console.log(e)
+      //     setName(e._data.name)
+      //     setEmail(e._data.email)
+      //     setPhone(e._data.phone)
+      //     setAddress(e._data.address)
+      //   }).catch((e) => {
+      //     // console.log(e)
+      //   })
+    }
+    
+
+
+  }, [])
 
   const handleChooseProfilePic = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -57,13 +83,40 @@ const Profile = () => {
     setEditMode(true);
   };
 
-  const handleSave = () => {
+  async function handleSave(){
     setEditMode(false);
     // ------------------------------------Call API or update data source with new profile information------------
+    
+    //  console.log(user._data?.cart)
+    if (Auth) {
+      firestore()
+        .collection(auth()._user.uid).doc('UserData')
+        .set({ name: name, phone: phone, email: email, address: address, profilePic: profilePic })
+        .then((e) => {
+          // console.log(e);
+          setcartbtm(true)
+        }).catch((e) => {
+          // console.log(e)
+
+        })
+    }
   };
 
   const handleLogout = () => {
     //---------------------------------------------- Handle logout logic---------------------------
+    if (Auth) {
+      auth()
+        .signOut()
+        .then(() => {
+          console.log('User signed out!')
+          navigation.navigate('Home')
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+    } else {
+      navigation.navigate('SignUp')
+    }
   };
 
   const renderOrderItem = ({ item }) => (
@@ -77,37 +130,32 @@ const Profile = () => {
     <View style={styles.container}>
       <ImageBackground source={image} style={styles.background}>
         <ScrollView>
-          <ImageBackground
-            source={{
-              uri: 'https://www.transparentpng.com/download/wave/background-wave-transparent-19.png',
-            }}
-            resizeMode="cover"
-          >
-            <View style={styles.profileHeader}>
-              <TouchableOpacity onPress={handleChooseProfilePic}>
-                {profilePic ? (
-                  
-                    <Image
-                      source={{ uri: profilePic }}
-                      style={styles.profilePic}
-                    />
-                  
-                ) : (
-                  <View style={styles.profilePic}>
-                    <Text style={styles.profilePicLabel}>Add Photo</Text>
-                  </View>
-                )}
-              </TouchableOpacity>
-              <Text style={styles.profileName}>{name}</Text>
-              <TouchableOpacity
-                style={styles.logoutButton}
-                onPress={handleLogout}
-              >
-                <AntDesign name="logout" size={20} color="white" />
-                <Text style={styles.logoutButtonText}>Logout</Text>
-              </TouchableOpacity>
-            </View>
-          </ImageBackground>
+
+          <View style={styles.profileHeader}>
+            <TouchableOpacity onPress={handleChooseProfilePic}>
+              {profilePic ? (
+
+                <Image
+                  source={{ uri: profilePic }}
+                  style={styles.profilePic}
+                />
+
+              ) : (
+                <View style={styles.profilePic}>
+                  <Text style={styles.profilePicLabel}>Add Photo</Text>
+                </View>
+              )}
+            </TouchableOpacity>
+            <Text style={styles.profileName}>{name}</Text>
+            <TouchableOpacity
+              style={styles.logoutButton}
+              onPress={handleLogout}
+            >
+              <AntDesign name="logout" size={20} color="white" />
+              <Text style={styles.logoutButtonText}>{Auth?"Logout":'LogIn'}</Text>
+            </TouchableOpacity>
+          </View>
+
           <View style={styles.form}>
             <View style={styles.mainlabeldiv}>
               <View style={styles.lablediv}>
@@ -188,26 +236,26 @@ const Profile = () => {
                 <Text style={styles.buttonText}>Save Changes</Text>
               </TouchableOpacity>
             ) : (
-              <TouchableOpacity style={styles.button} onPress={handleEdit}>
+              <TouchableOpacity disabled={!Auth} style={[styles.button, !Auth? {backgroundColor:'red'}:{background:'blue'} ]} onPress={handleEdit}>
                 <AntDesign name="edit" size={20} color="white" />
                 <Text style={styles.buttonText}>Edit Profile</Text>
               </TouchableOpacity>
             )}
             <View style={styles.listofCat}>
-              <TouchableOpacity style={styles.orderButton}>
+              {!editMode && <TouchableOpacity style={styles.orderButton}>
                 <MaterialCommunityIcons
                   name="cart-variant"
                   size={20}
                   color="white"
                 />
                 <Text style={styles.orderButtonText}>My Orders</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
+              </TouchableOpacity>}
+              {!editMode && <TouchableOpacity
                 style={{ ...styles.orderButton, backgroundColor: 'skyblue' }}
               >
                 <Ionicons name="ios-heart-outline" size={20} color="white" />
                 <Text style={styles.orderButtonText}>My WishList</Text>
-              </TouchableOpacity>
+              </TouchableOpacity>}
             </View>
 
             {/* <View style={styles.orders}>
@@ -246,16 +294,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // marginBottom: 10,
     padding: 20,
-  
+
   },
   profilePic: {
     marginRight: 10,
     width: 100,
     height: 100,
     borderRadius: 50,
-    borderWidth:2,
-    borderColor:"skyblue",
-    
+    borderWidth: 2,
+    borderColor: "skyblue",
+
   },
   profileName: {
     fontSize: 20,
@@ -305,6 +353,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '50%',
+    alignSelf: 'center',
+
   },
   buttonText: {
     color: '#fff',
@@ -333,7 +383,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 40,
     color: '#333',
-    marginLeft:15,
+    marginLeft: 15,
   },
   orders: {
     width: '100%',

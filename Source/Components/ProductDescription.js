@@ -13,12 +13,55 @@ import {
 import { Feather, MaterialCommunityIcons, Ionicons, AntDesign } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { AirbnbRating } from '@rneui/themed';
-
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 function ProductDescription({ navigation }) {
   const route = useRoute();
   const { item } = route.params;
   const [wishlist, setwishlist] = React.useState(false);
+  const [cartbtm, setcartbtm] = React.useState(false)
+ 
+  // console.log(auth()._user.uid)
+  async function AddtoCart() {
+    let Auth = auth()._authResult
+    if (!Auth) {
+      Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kara phir istam kara",)
+      navigation.navigate('EmailAuth')
+    } else {
+      const user = await firestore().collection(auth()._user.uid).doc('Cart').get();
+      firestore()
+        .collection(auth()._user.uid).doc('Cart')
+        .set({ "cart": user._exists ? [...user._data?.cart, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
+        .then((e) => {
+          // console.log(e);
+          setcartbtm(true)
+        }).catch((e) => {
+          // console.log(e)
+
+        })
+    }
+  
+  }
+  async function AddtoWishList() {
+    let Auth = auth()._authResult
+    if (!Auth) {
+      Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kara phir istam kara",)
+      navigation.navigate('EmailAuth')
+    } else {
+      const user = await firestore().collection(auth()._user.uid).doc('WishList').get();
+      // console.log(user._data?.wishlist)
+      firestore().collection(auth()._user.uid).doc('WishList')
+        .set({ "wishlist": user._exists ? [...user._data?.wishlist, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
+        .then((e) => {
+          // console.log(e);
+          setwishlist(true)
+        }).catch((e) => {
+          // console.log(e)
+        })
+    }
+  }
+
 
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
@@ -38,7 +81,7 @@ function ProductDescription({ navigation }) {
 
           </View>
           <View style={{ flexDirection: "row", padding: 5 }}>
-            <TouchableOpacity>
+            <TouchableOpacity >
               <Feather name="search" size={22} color="black" />
             </TouchableOpacity>
             <TouchableOpacity>
@@ -55,7 +98,7 @@ function ProductDescription({ navigation }) {
 
 
       <View style={{ paddingHorizontal: 15, paddingVertical: 15, backgroundColor: "white"}}>
-        <TouchableOpacity style={{ alignItems: "flex-end", paddingRight: 10 }} onPress={() => setwishlist(!wishlist)}>
+        <TouchableOpacity style={{ alignItems: "flex-end", paddingRight: 10 }} onPress={() => AddtoWishList()}>
           {wishlist ? <AntDesign name="heart" size={24} color="red" /> : <AntDesign name="hearto" size={24} color="#EBEDF0" />}
         </TouchableOpacity>
         <Image source={{ uri: item?.image }} style={styles.image} resizeMode="contain" />
@@ -65,7 +108,7 @@ function ProductDescription({ navigation }) {
 
           <View style={{ flexDirection: "row", paddingBottom: 5, paddingVertical: 8 }}>
             <AirbnbRating defaultRating={item.stars} isDisabled={true} showRating={false} size={20} />
-            <Text style={styles.rating}>{`${item?.hidden_stars} (${item?.ratings})`}</Text>
+            <Text style={styles.rating}>{item?.hidden_stars} ({item.ratings != undefined ? item.ratings : Math.floor(Math.random() * 100) + 10 })</Text>
 
           </View>
           <Text style={{
@@ -107,8 +150,8 @@ function ProductDescription({ navigation }) {
 
       </View>
       <View style={{ flexDirection: "row", flex: 1 }}>
-        <TouchableOpacity style={{ flex: 1, height: 40, paddingVertical: 10 }}>
-          <Text style={{ alignSelf: "center", fontSize: 15, fontWeight: "bold", }}>Add to Cart</Text>
+        <TouchableOpacity disabled={cartbtm} style={{ flex: 1, height: 40, paddingVertical: 10 }} onPress={()=>AddtoCart()} >
+          <Text style={{ alignSelf: "center", fontSize: 15, fontWeight: "bold", }}>{cartbtm?"Added to Cart":"Add to Cart"}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{ flex: 1, backgroundColor: "orange", height: 40, paddingVertical: 10 }}>
           <Text style={{ alignSelf: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Buy Now</Text>
