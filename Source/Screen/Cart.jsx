@@ -1,39 +1,68 @@
-import React, { useEffect, useState } from 'react';
-import { Text, Image, Button } from '@rneui/themed';
-import { View, StyleSheet, FlatList, ScrollView } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { Text, Image, Button, Icon } from '@rneui/themed';
+import { View, StyleSheet, ImageBackground, TouchableOpacity, Animated, Dimensions, FlatList, ScrollView, TextInput } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import Constants from 'expo-constants';
-import * as LocationProvider from 'expo-location';
+
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconsM from 'react-native-vector-icons/MaterialIcons';
+import Notification from '../Components/Notification';
+const phWidth = Dimensions.get('window').width;
+export default function Cart({ navigation }) {
+  const [no_of_notification, set_no_of_notification] = useState(3)
+  const Hpadding = useRef(new Animated.Value(0)).current;
+  const wid = useRef(new Animated.Value(0)).current;
 
-function Location() {
-  const [location, setLocation] = useState(null);
+  function on() {
+    Animated.spring(Hpadding, { toValue: 10, overshootClamping: true, useNativeDriver: false }).start()
+    Animated.spring(wid, { toValue: phWidth - 102, overshootClamping: true, useNativeDriver: false }).start()
+  }
+  function off() {
+    Animated.spring(Hpadding, { toValue: 0, overshootClamping: true, useNativeDriver: false }).start()
+    Animated.spring(wid, { toValue: 0, overshootClamping: true, useNativeDriver: false }).start()
+  }
+  const [cart, setCart] = useState([{
+    "category_id": 3,
+    "category_name": "mobiles",
+    "image": "https://i.ibb.co/6bZc0zJ/f6b32d514024.jpg",
+    "description": "realme 9 (Stargaze White, 128 GB)",
+    "stars": 4.3,
+    "ratings": "4,161 Ratings ",
+    "reviews": " 310 Reviews",
+    "warranty": "1 Year Manufacturer Warranty for Phone and 6 Months Warranty for In-Box Accessories",
+    "new_price": 1799,
+    "old_price": 2999,
+    "discount": 40,
+    "delivery_type": "Free delivery",
+    "offer": "₹16,750",
+    "offer2": " O",
+    "qun":1
+  }]);
+  useEffect(()=>{
+    let Auth = true
+    if (!Auth) {
+      Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kare phir istam kara",)
+      navigation.navigate('EmailAuth')
+    } else {
+      // firestore().collection(auth()._user.uid)?.doc('Cart')?.get()
+      //   .then((rs) => {
+      //     setCart(rs)
+      // })
+        
+    }
+  }, [])
 
-  const checkLocation = async () => {
-    const { coords } = await LocationProvider.getCurrentPositionAsync({});
-    setLocation({ latitude: coords.latitude, longitude: coords.longitude });
-  };
-
-  return (
-    <View style={styles.locationContainer}>
-      <IconsM size={22} name='location-on' />
-      <Text onPress={checkLocation}>Check for delivery availability</Text>
-    </View>
-  );
-}
-
-function QtySelect({ qty ,index}) {
+  function QtySelect({ qty, index }) {
     const handleDecrease = () => {
-        const updatedCart = [...cart];
-        if (updatedCart[index].qun > 1) {
-            updatedCart[index].qun -= 1;
-        } else {
-            updatedCart.splice(index, 1);
-        }
-        setCart(updatedCart);
-        firestore()
+      const updatedCart = [...cart];
+      if (updatedCart[index].qun > 1) {
+        updatedCart[index].qun -= 1;
+      } else {
+        updatedCart.splice(index, 1);
+      }
+      setCart(updatedCart);
+      firestore()
         .collection(auth()._user.uid).doc('Cart')
         .set(updatedCart)
         .then((e) => {
@@ -44,10 +73,10 @@ function QtySelect({ qty ,index}) {
     };
 
     const handleIncrease = () => {
-        const updatedCart = [...cart];
-        updatedCart[index].qun += 1;
-        setCart(updatedCart);
-        firestore()
+      const updatedCart = [...cart];
+      updatedCart[index].qun += 1;
+      setCart(updatedCart);
+      firestore()
         .collection(auth()._user.uid).doc('Cart')
         .set(updatedCart)
         .then((e) => {
@@ -57,56 +86,54 @@ function QtySelect({ qty ,index}) {
         })
     };
 
-  return (
-    <View style={styles.qtySelectContainer}>
-      <TouchableOpacity onPress={handleDecrease}>
-        <Icons size={20} name={qty > 1 ? 'minus-thick' : 'delete'} />
-      </TouchableOpacity>
-      <TextInput value={qty} style={styles.qtyInput} />
-      <TouchableOpacity onPress={handleIncrease}>
-        <Icons size={20} name='plus-thick' />
-      </TouchableOpacity>
-    </View>
-  );
-}
-
-export default function Cart({navigation}) {
-  const [cart, setCart] = useState([]);
-  useEffect(async()=>{
-    let Auth = auth()._user
-    if (!Auth) {
-      Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kare phir istam kara",)
-      navigation.navigate('EmailAuth')
-    } else {
-      const cartFetched = await firestore().collection(auth()._user.uid).doc('Cart').get();
-        setCart(cartFetched)
-    }
-  },[])
-  const item = ({ item }) => {
     return (
-      <View style={styles.cartItemContainer}>
-        <View>
-          <Image
-            source={{ uri: item.image }}
-            style={styles.productImage}
-            resizeMode='contain'
-          />
-          <QtySelect qty={item.qun} />
-        </View>
-        <View style={styles.itemInfoContainer}>
-          <Text style={styles.itemDescription}>{item.description}</Text>
-          <Text style={styles.itemPrice}>₹{item.new_price}.00</Text>
-          <Text style={styles.itemStatus}>Eligible for Free Shipping</Text>
-          <Text style={styles.itemStatus}>In stock</Text>
-        </View>
+      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
+        <TouchableOpacity onPress={() => handleDecrease()}><Icons size={20} name={qty > 1 ? 'minus-thick' : 'delete'} /></TouchableOpacity>
+        <Text style={{ width: 45, textAlign: 'center' }} > {qty}</Text>
+        <TouchableOpacity onPress={() => handleIncrease()}><Icons size={20} name='plus-thick' /></TouchableOpacity>
       </View>
     );
-  };
+  }
+
+  function item({ item, index }) {
+    return <View style={{ ...styles.flex, ...styles.cartItem }}>
+      <View>
+        <Image source={{ uri: item.image }} style={{ ...styles.prodImg }} resizeMode='contain' />
+        <QtySelect qty={item.qun} index={index} />
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text>{item.description}</Text>
+        <Text>₹{item.new_price}.00</Text>
+        <Text>Eligible for Free Shipping</Text>
+        <Text>In stock</Text>
+      </View>
+    </View>
+  }
 
   return (
     <View>
-    <Location />
-    {!cart.length ? (
+      
+      <ImageBackground
+        source={{
+          uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTU9R3q8guKFAt-fsNfc_7AN6a_o9tQxsAGXnbPDNbuvndQfusFQRHl3wCLAzGRIL0Pr_M&usqp=CAU",
+        }}
+        resizeMode="cover"
+
+      >
+        <View style={styles.banner}>
+          <Image source={require('./logo2.png')} style={{ width: 120, height: 60, marginRight: 0 }} />
+          <View style={{ flexDirection: 'row', width: 60, justifyContent: 'space-between' }} >
+            <TouchableOpacity onPress={() => navigation.navigate('SearchCom')} >
+              <Icon name='search' type='feather' />
+            </TouchableOpacity>
+            <TouchableOpacity style={{ position: 'relative' }} onPress={() => on()} >
+              <Icon name='bell' type='feather' size={23} />
+              <Text style={{ position: 'absolute', color: 'green', fontSize: 18, fontWeight: 800, bottom: '50%', right: '50%' }} >{no_of_notification}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ImageBackground>
+    {cart.length==0? (
       <View style={styles.emptyCartContainer}>
         <Image
           source={{ uri: "https://pic.onlinewebfonts.com/svg/img_171562.png" }}
@@ -116,23 +143,32 @@ export default function Cart({navigation}) {
         <Text>Your Cart is Empty</Text>
       </View>
     ) : (
-      <ScrollView>
-        <View style={styles.subtotalContainer}>
-          <Text>SubTotal ₹{cart.reduce((ac, e) => ac + e.new_price * e.qun, 0)}.0</Text>
-          <Text>Your order is eligible for Delivery</Text>
-        </View>
-        <FlatList
-          data={cart}
-          renderItem={item}
-          ItemSeparatorComponent={() => <View style={styles.separator}></View>}
-          ListFooterComponent={() => (
-            <Button title="Proceed to Buy" style={styles.buyButton} />
-          )}
-        />
-      </ScrollView>
+          <ScrollView>
+            <View style={{ padding: 10 }}>
+              <Text>SubTotal ₹{cart.reduce((ac, e) => { return ac + e.new_price * e.qun }, 0)}.0</Text>
+              <Text>Your order is eligible for Delivery</Text>
+            </View>
+            <FlatList
+              data={cart}
+              renderItem={item}
+              ItemSeparatorComponent={() => <View style={styles.separator}></View>}
+              ListFooterComponent={() => <Button title="Proceed to Buy" style={{ width: 230, alignSelf: 'center', paddingBottom: 20 }} />}
+            />
+
+          </ScrollView>
     )}
   </View>
 
+  );
+}
+
+function Location() {
+  const [location, setLocation] = useState(null);
+  return (
+    <View style={styles.locationContainer}>
+      <IconsM size={22} name='location-on' />
+      <Text>Check for delivery availability</Text>
+    </View>
   );
 }
 
@@ -140,6 +176,12 @@ let styles = StyleSheet.create({
   flex:{
     flexDirection:'row',
     alignItems:'center'
+  },
+  banner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: 10
   },
   prodImg:{
     aspectRatio: 1,
@@ -179,14 +221,15 @@ let styles = StyleSheet.create({
     color: '#333333',
   },
   emptyCartContainer: {
-    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    padding: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-around'
   },
   emptyCartImage: {
-    width: 200,
-    height: 200,
-    marginBottom: 20,
+    aspectRatio: 1,
+    width: 100,
+    height: 100,
   },
   emptyCartText: {
     fontSize: 18,
