@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { Feather, MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import { Feather, MaterialCommunityIcons, Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import SearchProductCard from "./SearchproductCard";
 import FilterAndSortComponent from "./Filter";
@@ -27,6 +27,47 @@ function SearchProductList({ navigation }) {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  React.useEffect(()=>{
+
+  },[product])
+const priceLow=()=>{
+ 
+  const sortedProducts = [...product].sort((a, b) => {
+          return a.current_price - b.current_price;
+    }
+  );
+  
+  setProduct(sortedProducts);  
+}
+const pricehigh=()=>{
+  const sortedProducts = [...product].sort((a, b) => {
+    return b.current_price - a.current_price;
+}
+);
+
+setProduct(sortedProducts);  
+}
+
+const nameLow=()=>{
+  const sortedProducts = [...product].sort((a, b) => {
+    return a.name - b.name;
+}
+);
+
+setProduct(sortedProducts);  
+}
+
+const nameHigh=()=>{
+  const sortedProducts = [...product].sort((a, b) => {
+    return b.name - a.name;
+}
+);
+setProduct(sortedProducts);  
+}
+
+
+
 
   return (
     <ScrollView>
@@ -73,7 +114,31 @@ function SearchProductList({ navigation }) {
           </View>
         </View>
       </ImageBackground>
-
+      <ScrollView horizontal={true}>
+        <View style={{flexDirection:"row",paddingVertical:10,justifyContent:"space-between"}} >
+        <TouchableOpacity onPress={()=>{console.log("Sort"); priceLow()}} style={{flexDirection:"row", borderRadius:10, borderColor:"#EBEDF0",backgroundColor:"#EBEDF0", paddingVertical:3, paddingHorizontal:6, borderWidth:1,marginHorizontal:5}}>
+        <FontAwesome name="sort-amount-asc" size={14} color="gray" style={{paddingTop:2}} />
+        <Text style={{paddingLeft:3}}>Price:Low to high</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={()=>{console.log("Sort"); pricehigh()}} style={{flexDirection:"row", borderRadius:10, borderColor:"#EBEDF0",backgroundColor:"#EBEDF0", paddingVertical:3, paddingHorizontal:6, borderWidth:1,marginHorizontal:5}}>
+        <FontAwesome name="sort-amount-desc" size={14} color="gray" style={{paddingTop:2}}/>
+        <Text style={{paddingLeft:3}}>Price:High to Low</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity onPress={()=>{console.log("Sort"); nameLow()}} style={{flexDirection:"row", borderRadius:10, borderColor:"#EBEDF0",backgroundColor:"#EBEDF0", paddingVertical:3, paddingHorizontal:6, borderWidth:1,marginHorizontal:5}}>
+        <FontAwesome name="sort-alpha-asc" size={14} color="gray" style={{paddingTop:2}} />
+        <Text style={{paddingLeft:3}}>Asc:A to Z</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={()=>{console.log("Sort"); nameHigh()}} style={{flexDirection:"row", borderRadius:10, borderColor:"#EBEDF0",backgroundColor:"#EBEDF0", paddingVertical:3, paddingHorizontal:6, borderWidth:1,marginHorizontal:5}}>
+        <FontAwesome name="sort-alpha-desc" size={14} color="gray" style={{paddingTop:2}}/>
+        <Text style={{paddingLeft:3}}>Desc:Z to A</Text>
+        </TouchableOpacity>
+        <TouchableOpacity   style={{flexDirection:"row", borderRadius:10, borderColor:"#EBEDF0",backgroundColor:"#EBEDF0", paddingVertical:3, paddingHorizontal:6, borderWidth:1,marginHorizontal:5}}>
+        <FontAwesome name="filter" size={16} color="gray" style={{paddingTop:2}}/>
+        <Text style={{paddingLeft:3}}>Filters</Text>
+        </TouchableOpacity>
+        </View>
+      </ScrollView>
       <View
         style={{
           flexDirection: "row",
