@@ -9,19 +9,19 @@ import Notification from '../Components/Notification';
 const phWidth = Dimensions.get('window').width;
 
 function Home({navigation}) {
-    const [no_of_notification, set_no_of_notification] = useState(0)
+    const [no_of_notification, set_no_of_notification] = useState(3)
     const Hpadding = useRef(new Animated.Value(0)).current;
     const wid = useRef(new Animated.Value(0)).current;
     
     function on() {
         Animated.spring(Hpadding, { toValue: 10, overshootClamping: true, useNativeDriver:false }).start()
-        Animated.spring(wid, { toValue: phWidth - 102, overshootClamping: true, useNativeDriver: false }).start()
+        Animated.spring(wid, { toValue: phWidth - 135, overshootClamping: true, useNativeDriver: false }).start()
     }
     function off() {
         Animated.spring(Hpadding, { toValue: 0, overshootClamping: true, useNativeDriver: false }).start()
         Animated.spring(wid, { toValue: 0, overshootClamping: true, useNativeDriver: false }).start()
     }
-
+    useEffect(() => { }, [no_of_notification])
     
     return (
 

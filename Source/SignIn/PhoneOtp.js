@@ -27,7 +27,7 @@ export default PhoneOtp = ({phone}) => {
       Alert.alert('Sign In Successful', 'Lets Rock baby', [
         {
           text: 'Ok',
-          onPress: () => navigation.navigate('BottomTab'),
+          onPress: () => navigation.navigate('Home'),
           style: 'cancel',
         },
       ],)
