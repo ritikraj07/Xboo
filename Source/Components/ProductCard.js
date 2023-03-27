@@ -18,7 +18,7 @@ export default function ProductCard({item}) {
   const navigation=useNavigation();
 
   async function AddtoWishList() {
-    let Auth = auth()._authResult
+    let Auth = auth()._user
     if (!Auth) {
       Alert.alert('XBoo!  Message', "You haven't login baby \n LogIn first!",)
       navigation.navigate('EmailAuth')

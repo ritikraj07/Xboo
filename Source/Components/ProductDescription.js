@@ -24,7 +24,7 @@ function ProductDescription({ navigation }) {
  
   // console.log(auth()._user.uid)
   async function AddtoCart() {
-    let Auth = auth()._authResult
+    let Auth = auth()._user
     if (!Auth) {
       Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kara phir istam kara",)
       navigation.navigate('EmailAuth')
