@@ -18,60 +18,12 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-<<<<<<< HEAD
 import { AirbnbRating } from "@rneui/themed";
-=======
-import { AirbnbRating } from '@rneui/themed';
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
->>>>>>> 5d38616189aa4a7030818e4814c7af66a770221b
 
-function ProductDescription({ navigation }) {
+function SearchProductDescription({ navigation }) {
   const route = useRoute();
   const { item } = route.params;
   const [wishlist, setwishlist] = React.useState(false);
-  const [cartbtm, setcartbtm] = React.useState(false)
- 
-  // console.log(auth()._user.uid)
-  async function AddtoCart() {
-    let Auth = auth()._user
-    if (!Auth) {
-      Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kara phir istam kara",)
-      navigation.navigate('EmailAuth')
-    } else {
-      const user = await firestore().collection(auth()._user.uid).doc('Cart').get();
-      firestore()
-        .collection(auth()._user.uid).doc('Cart')
-        .set({ "cart": user._exists ? [...user._data?.cart, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
-        .then((e) => {
-          // console.log(e);
-          setcartbtm(true)
-        }).catch((e) => {
-          // console.log(e)
-
-        })
-    }
-  
-  }
-  async function AddtoWishList() {
-    let Auth = auth()._authResult
-    if (!Auth) {
-      Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kara phir istam kara",)
-      navigation.navigate('EmailAuth')
-    } else {
-      const user = await firestore().collection(auth()._user.uid).doc('WishList').get();
-      // console.log(user._data?.wishlist)
-      firestore().collection(auth()._user.uid).doc('WishList')
-        .set({ "wishlist": user._exists ? [...user._data?.wishlist, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
-        .then((e) => {
-          // console.log(e);
-          setwishlist(true)
-        }).catch((e) => {
-          // console.log(e)
-        })
-    }
-  }
-
 
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
@@ -94,11 +46,7 @@ function ProductDescription({ navigation }) {
             </TouchableOpacity>
           </View>
           <View style={{ flexDirection: "row", padding: 5 }}>
-<<<<<<< HEAD
             <TouchableOpacity onPress={() => navigation.navigate("SearchCom")}>
-=======
-            <TouchableOpacity >
->>>>>>> 5d38616189aa4a7030818e4814c7af66a770221b
               <Feather name="search" size={22} color="black" />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate("SearchCom")}>
@@ -113,7 +61,6 @@ function ProductDescription({ navigation }) {
         </View>
       </ImageBackground>
 
-<<<<<<< HEAD
       <View
         style={{
           paddingHorizontal: 15,
@@ -130,23 +77,15 @@ function ProductDescription({ navigation }) {
           ) : (
             <AntDesign name="hearto" size={24} color="#EBEDF0" />
           )}
-=======
-
-      <View style={{ paddingHorizontal: 15, paddingVertical: 15, backgroundColor: "white"}}>
-        <TouchableOpacity style={{ alignItems: "flex-end", paddingRight: 10 }} onPress={() => AddtoWishList()}>
-          {wishlist ? <AntDesign name="heart" size={24} color="red" /> : <AntDesign name="hearto" size={24} color="#EBEDF0" />}
->>>>>>> 5d38616189aa4a7030818e4814c7af66a770221b
         </TouchableOpacity>
         <Image
-          source={{ uri: item?.image }}
+          source={{ uri: item?.thumbnail }}
           style={styles.image}
           resizeMode="contain"
         />
         <View style={styles.details}>
-          <Text style={{ color: "gray" }}>{item?.category_name}</Text>
-          <Text style={styles.name}>{item.description}</Text>
+          <Text style={styles.name}>{item.name}</Text>
 
-<<<<<<< HEAD
           <View
             style={{
               flexDirection: "row",
@@ -155,20 +94,12 @@ function ProductDescription({ navigation }) {
             }}
           >
             <AirbnbRating
-              defaultRating={item.stars}
+              defaultRating={Math.floor(Math.random() * 5) + 1}
               isDisabled={true}
               showRating={false}
               size={20}
             />
-            <Text
-              style={styles.rating}
-            >{`${item?.hidden_stars} (${item?.ratings})`}</Text>
-=======
-          <View style={{ flexDirection: "row", paddingBottom: 5, paddingVertical: 8 }}>
-            <AirbnbRating defaultRating={item.stars} isDisabled={true} showRating={false} size={20} />
-            <Text style={styles.rating}>{item?.hidden_stars} ({item.ratings != undefined ? item.ratings : Math.floor(Math.random() * 100) + 10 })</Text>
-
->>>>>>> 5d38616189aa4a7030818e4814c7af66a770221b
+            <Text style={styles.rating}>{`${Math.floor(Math.random() * 5) + 1} (${Math.floor(Math.random() * 5000) + 1})`}</Text>
           </View>
           <Text
             style={{
@@ -201,7 +132,7 @@ function ProductDescription({ navigation }) {
                   fontWeight: "bold",
                   marginRight: 10,
                 }}
-              >{`${item?.discount}% off`}</Text>
+              >{`${Math.floor(Math.random() * 50) + 2}% off`}</Text>
               <Text
                 style={{
                   fontSize: 18,
@@ -212,10 +143,10 @@ function ProductDescription({ navigation }) {
                   marginRight: 10,
                 }}
               >
-                ₹{item?.old_price}
+                ₹{item?.original_price}
               </Text>
 
-              <Text style={styles.price}>₹{item?.new_price}</Text>
+              <Text style={styles.price}>₹{item?.current_price}</Text>
             </View>
           </View>
           <Text style={{ fontWeight: "bold", fontSize: 13, paddingTop: 4 }}>
@@ -224,17 +155,12 @@ function ProductDescription({ navigation }) {
         </View>
       </View>
       <View style={{ flexDirection: "row", flex: 1 }}>
-<<<<<<< HEAD
         <TouchableOpacity style={{ flex: 1, height: 40, paddingVertical: 10 }}>
           <Text
             style={{ alignSelf: "center", fontSize: 15, fontWeight: "bold" }}
           >
             Add to Cart
           </Text>
-=======
-        <TouchableOpacity disabled={cartbtm} style={{ flex: 1, height: 40, paddingVertical: 10 }} onPress={()=>AddtoCart()} >
-          <Text style={{ alignSelf: "center", fontSize: 15, fontWeight: "bold", }}>{cartbtm?"Added to Cart":"Add to Cart"}</Text>
->>>>>>> 5d38616189aa4a7030818e4814c7af66a770221b
         </TouchableOpacity>
         <TouchableOpacity
           style={{
@@ -260,7 +186,7 @@ function ProductDescription({ navigation }) {
   );
 }
 
-export default ProductDescription;
+export default SearchProductDescription;
 
 const styles = StyleSheet.create({
   headerView: {
