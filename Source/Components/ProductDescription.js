@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -18,13 +18,9 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-<<<<<<< HEAD
-import { AirbnbRating } from "@rneui/themed";
-=======
 import { AirbnbRating } from '@rneui/themed';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
->>>>>>> 5d38616189aa4a7030818e4814c7af66a770221b
 
 function ProductDescription({ navigation }) {
   const route = useRoute();
@@ -94,11 +90,7 @@ function ProductDescription({ navigation }) {
             </TouchableOpacity>
           </View>
           <View style={{ flexDirection: "row", padding: 5 }}>
-<<<<<<< HEAD
             <TouchableOpacity onPress={() => navigation.navigate("SearchCom")}>
-=======
-            <TouchableOpacity >
->>>>>>> 5d38616189aa4a7030818e4814c7af66a770221b
               <Feather name="search" size={22} color="black" />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate("SearchCom")}>
@@ -113,29 +105,10 @@ function ProductDescription({ navigation }) {
         </View>
       </ImageBackground>
 
-<<<<<<< HEAD
-      <View
-        style={{
-          paddingHorizontal: 15,
-          paddingVertical: 15,
-          backgroundColor: "white",
-        }}
-      >
-        <TouchableOpacity
-          style={{ alignItems: "flex-end", paddingRight: 10 }}
-          onPress={() => setwishlist(!wishlist)}
-        >
-          {wishlist ? (
-            <AntDesign name="heart" size={24} color="red" />
-          ) : (
-            <AntDesign name="hearto" size={24} color="#EBEDF0" />
-          )}
-=======
 
       <View style={{ paddingHorizontal: 15, paddingVertical: 15, backgroundColor: "white"}}>
         <TouchableOpacity style={{ alignItems: "flex-end", paddingRight: 10 }} onPress={() => AddtoWishList()}>
           {wishlist ? <AntDesign name="heart" size={24} color="red" /> : <AntDesign name="hearto" size={24} color="#EBEDF0" />}
->>>>>>> 5d38616189aa4a7030818e4814c7af66a770221b
         </TouchableOpacity>
         <Image
           source={{ uri: item?.image }}
@@ -146,7 +119,6 @@ function ProductDescription({ navigation }) {
           <Text style={{ color: "gray" }}>{item?.category_name}</Text>
           <Text style={styles.name}>{item.description}</Text>
 
-<<<<<<< HEAD
           <View
             style={{
               flexDirection: "row",
@@ -163,12 +135,6 @@ function ProductDescription({ navigation }) {
             <Text
               style={styles.rating}
             >{`${item?.hidden_stars} (${item?.ratings})`}</Text>
-=======
-          <View style={{ flexDirection: "row", paddingBottom: 5, paddingVertical: 8 }}>
-            <AirbnbRating defaultRating={item.stars} isDisabled={true} showRating={false} size={20} />
-            <Text style={styles.rating}>{item?.hidden_stars} ({item.ratings != undefined ? item.ratings : Math.floor(Math.random() * 100) + 10 })</Text>
-
->>>>>>> 5d38616189aa4a7030818e4814c7af66a770221b
           </View>
           <Text
             style={{
@@ -224,17 +190,8 @@ function ProductDescription({ navigation }) {
         </View>
       </View>
       <View style={{ flexDirection: "row", flex: 1 }}>
-<<<<<<< HEAD
-        <TouchableOpacity style={{ flex: 1, height: 40, paddingVertical: 10 }}>
-          <Text
-            style={{ alignSelf: "center", fontSize: 15, fontWeight: "bold" }}
-          >
-            Add to Cart
-          </Text>
-=======
         <TouchableOpacity disabled={cartbtm} style={{ flex: 1, height: 40, paddingVertical: 10 }} onPress={()=>AddtoCart()} >
           <Text style={{ alignSelf: "center", fontSize: 15, fontWeight: "bold", }}>{cartbtm?"Added to Cart":"Add to Cart"}</Text>
->>>>>>> 5d38616189aa4a7030818e4814c7af66a770221b
         </TouchableOpacity>
         <TouchableOpacity
           style={{
