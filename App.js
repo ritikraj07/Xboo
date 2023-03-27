@@ -17,7 +17,9 @@ import PhoneOtp from './Source/SignIn/PhoneOtp';
 import EmailAuth from './Source/SignIn/EmailAuth';
 import ProductList from './Source/Components/ProductList';
 import ProductDescription from './Source/Components/ProductDescription';
-
+import SearchproductCard from './Source/Components/SearchproductCard';
+import SearchProductList from './Source/Components/SearchProductList';
+import SearchProductDescription from './Source/Components/SearchProductDes';
 
 function BottomTabs() {
   return <Tab.Navigator
@@ -68,6 +70,8 @@ function MyStack() {
     <Stack.Screen name="EmailAuth" component={EmailAuth} />
     <Stack.Screen name="productList" component={ProductList} />
     <Stack.Screen name="productdesc" component={ProductDescription} />
+    <Stack.Screen name="Searchproductdesc" component={SearchProductDescription} />
+    <Stack.Screen name="SearchproductList" component={SearchProductList} />
     
   </Stack.Navigator>)
 }

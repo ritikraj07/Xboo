@@ -4,29 +4,31 @@ import {
   Text,
   Image,
   FlatList,
-  StyleSheet,ImageBackground,
+  StyleSheet,
+  ImageBackground,
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { Feather, MaterialCommunityIcons,Ionicons } from "@expo/vector-icons";
+import { Feather, MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import ProductCard from "./ProductCard";
 import FilterAndSortComponent from "./Filter";
 
-function ProductList({navigation}) {
-   const route = useRoute();
-   const {item} = route.params;
-   const [product,setProduct]=React.useState([]);
- 
- const search=item.search;
+function ProductList({ navigation }) {
+  const route = useRoute();
+  const { item } = route.params;
+  const [product, setProduct] = React.useState([]);
 
-React.useEffect(()=>{
-  fetch(`https://flipkart-data.onrender.com/${search}`)
-  .then((res)=>res.json())
-  .then((data)=>{setProduct(data)})
-  .catch(err=>console.log(err));
-},[])
+  const search = item.search;
 
+  React.useEffect(() => {
+    fetch(`https://flipkart-data.onrender.com/${search}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setProduct(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <ScrollView>
@@ -37,42 +39,60 @@ React.useEffect(()=>{
         resizeMode="cover"
         style={{ flex: 1, justifyContent: "center" }}
       >
-      <View
-        style={style.headerView}
-      >
-        <View style={{ flexDirection: "row"}}>
+        <View style={style.headerView}>
+          <View style={{ flexDirection: "row" }}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Ionicons name="arrow-back-sharp" size={24} color="black" style={{ paddingTop: 2 }}/></TouchableOpacity>
-        <Text style={{ fontSize: 20, color: "black",fontWeight:500, paddingLeft: 10 }}>{item.category}</Text>
+              <Ionicons
+                name="arrow-back-sharp"
+                size={24}
+                color="black"
+                style={{ paddingTop: 2 }}
+              />
+            </TouchableOpacity>
+            <Text
+              style={{
+                fontSize: 20,
+                color: "black",
+                fontWeight: 500,
+                paddingLeft: 10,
+              }}
+            >
+              {item.category}
+            </Text>
+          </View>
+          <View style={{ flexDirection: "row", padding: 5 }}>
+            <TouchableOpacity onPress={() => navigation.navigate("SearchCom")}>
+              <Feather name="search" size={22} color="black" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("SearchCom")}>
+              <MaterialCommunityIcons
+                name="microphone"
+                size={22}
+                color="black"
+                style={{ paddingLeft: 15 }}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={{ flexDirection: "row", padding: 5 }}>
-          <TouchableOpacity>
-            <Feather name="search" size={22} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <MaterialCommunityIcons
-              name="microphone"
-              size={22}
-              color="black"
-              style={{ paddingLeft: 15 }}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
       </ImageBackground>
-     
-     
-     <View style={{flexDirection:"row",paddingHorizontal:5, width:"100%", justifyContent:"center",alignitems:"center"}}>
-     <FlatList
-        data={product}
-        renderItem={({item}) => <ProductCard item={item}/>}
-        scrollEnabled={false}
-        keyExtractor={item => item.item_id}
-        numColumns={2}
-      />
-     </View>
-      
-   
+
+      <View
+        style={{
+          flexDirection: "row",
+          paddingHorizontal: 5,
+          width: "100%",
+          justifyContent: "center",
+          alignitems: "center",
+        }}
+      >
+        <FlatList
+          data={product}
+          renderItem={({ item }) => <ProductCard item={item} />}
+          scrollEnabled={false}
+          keyExtractor={(item) => item.item_id}
+          numColumns={2}
+        />
+      </View>
     </ScrollView>
   );
 }
@@ -80,13 +100,12 @@ React.useEffect(()=>{
 export default ProductList;
 
 const style = StyleSheet.create({
-    headerView:{
-        
-          flexDirection: "row",
-          height: 60,
-          padding: 15,
-          justifyContent: "space-between",
-    },
+  headerView: {
+    flexDirection: "row",
+    height: 60,
+    padding: 15,
+    justifyContent: "space-between",
+  },
   containerView: {
     flexDirection: "row",
     paddingTop: 20,
@@ -107,15 +126,14 @@ const style = StyleSheet.create({
   iconText: {
     alignSelf: "center",
     paddingTop: 5,
-    fontWeight:500,
+    fontWeight: 500,
   },
 
-  hLView:{
-    marginTop:15,
-    borderTopWidth:1,
-    borderTopColor:"#BDBDBD",
-    width:200,
-    marginLeft:15,
-    
-  }
+  hLView: {
+    marginTop: 15,
+    borderTopWidth: 1,
+    borderTopColor: "#BDBDBD",
+    width: 200,
+    marginLeft: 15,
+  },
 });
