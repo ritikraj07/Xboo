@@ -19,55 +19,11 @@ import {
 } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { AirbnbRating } from "@rneui/themed";
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
 
-function ProductDescription({ navigation }) {
+function SearchProductDescription({ navigation }) {
   const route = useRoute();
   const { item } = route.params;
   const [wishlist, setwishlist] = React.useState(false);
-  const [cartbtm, setcartbtm] = React.useState(false)
- 
-  // console.log(auth()._user.uid)
-  async function AddtoCart() {
-    let Auth = auth()._user
-    if (!Auth) {
-      Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kara phir istam kara",)
-      navigation.navigate('EmailAuth')
-    } else {
-      const user = await firestore().collection(auth()._user.uid).doc('Cart').get();
-      firestore()
-        .collection(auth()._user.uid).doc('Cart')
-        .set({ "cart": user._exists ? [...user._data?.cart, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
-        .then((e) => {
-          // console.log(e);
-          setcartbtm(true)
-        }).catch((e) => {
-          // console.log(e)
-
-        })
-    }
-  
-  }
-  async function AddtoWishList() {
-    let Auth = auth()._authResult
-    if (!Auth) {
-      Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kara phir istam kara",)
-      navigation.navigate('EmailAuth')
-    } else {
-      const user = await firestore().collection(auth()._user.uid).doc('WishList').get();
-      // console.log(user._data?.wishlist)
-      firestore().collection(auth()._user.uid).doc('WishList')
-        .set({ "wishlist": user._exists ? [...user._data?.wishlist, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
-        .then((e) => {
-          // console.log(e);
-          setwishlist(true)
-        }).catch((e) => {
-          // console.log(e)
-        })
-    }
-  }
-
 
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
@@ -123,13 +79,12 @@ function ProductDescription({ navigation }) {
           )}
         </TouchableOpacity>
         <Image
-          source={{ uri: item?.image }}
+          source={{ uri: item?.thumbnail }}
           style={styles.image}
           resizeMode="contain"
         />
         <View style={styles.details}>
-          <Text style={{ color: "gray" }}>{item?.category_name}</Text>
-          <Text style={styles.name}>{item.description}</Text>
+          <Text style={styles.name}>{item.name}</Text>
 
           <View
             style={{
@@ -139,14 +94,12 @@ function ProductDescription({ navigation }) {
             }}
           >
             <AirbnbRating
-              defaultRating={item.stars}
+              defaultRating={Math.floor(Math.random() * 5) + 1}
               isDisabled={true}
               showRating={false}
               size={20}
             />
-            <Text
-              style={styles.rating}
-            >{`${item?.hidden_stars} (${item?.ratings})`}</Text>
+            <Text style={styles.rating}>{`${Math.floor(Math.random() * 5) + 1} (${Math.floor(Math.random() * 5000) + 1})`}</Text>
           </View>
           <Text
             style={{
@@ -179,7 +132,7 @@ function ProductDescription({ navigation }) {
                   fontWeight: "bold",
                   marginRight: 10,
                 }}
-              >{`${item?.discount}% off`}</Text>
+              >{`${Math.floor(Math.random() * 50) + 2}% off`}</Text>
               <Text
                 style={{
                   fontSize: 18,
@@ -190,10 +143,10 @@ function ProductDescription({ navigation }) {
                   marginRight: 10,
                 }}
               >
-                ₹{item?.old_price}
+                ₹{item?.original_price}
               </Text>
 
-              <Text style={styles.price}>₹{item?.new_price}</Text>
+              <Text style={styles.price}>₹{item?.current_price}</Text>
             </View>
           </View>
           <Text style={{ fontWeight: "bold", fontSize: 13, paddingTop: 4 }}>
@@ -233,7 +186,7 @@ function ProductDescription({ navigation }) {
   );
 }
 
-export default ProductDescription;
+export default SearchProductDescription;
 
 const styles = StyleSheet.create({
   headerView: {

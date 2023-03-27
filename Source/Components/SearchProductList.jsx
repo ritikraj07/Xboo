@@ -11,22 +11,19 @@ import {
 } from "react-native";
 import { Feather, MaterialCommunityIcons, Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import ProductCard from "./ProductCard";
+import SearchProductCard from "./SearchproductCard";
 import FilterAndSortComponent from "./Filter";
-import { SearchBar } from '@rneui/themed'
 
-function ProductList({ navigation }) {
+function SearchProductList({ navigation }) {
   const route = useRoute();
-  const { item } = route.params;
+  const { search } = route.params;
   const [product, setProduct] = React.useState([]);
 
-  const search = item.search;
-
   React.useEffect(() => {
-    fetch(`https://flipkart-data.onrender.com/${search}`)
+    fetch(`https://flipkart.dvishal485.workers.dev/search/${search}`)
       .then((res) => res.json())
       .then((data) => {
-        setProduct(data);
+        setProduct(data.result);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -37,15 +34,15 @@ function ProductList({ navigation }) {
 const priceLow=()=>{
  
   const sortedProducts = [...product].sort((a, b) => {
-          return a.new_price - b.new_price;
+          return a.current_price - b.current_price;
     }
   );
- 
+  
   setProduct(sortedProducts);  
 }
 const pricehigh=()=>{
   const sortedProducts = [...product].sort((a, b) => {
-    return b.new_price - a.new_price;
+    return b.current_price - a.current_price;
 }
 );
 
@@ -54,7 +51,7 @@ setProduct(sortedProducts);
 
 const nameLow=()=>{
   const sortedProducts = [...product].sort((a, b) => {
-    return a.description - b.description;
+    return a.name - b.name;
 }
 );
 
@@ -63,19 +60,14 @@ setProduct(sortedProducts);
 
 const nameHigh=()=>{
   const sortedProducts = [...product].sort((a, b) => {
-    return b.description - a.description;
+    return b.name - a.name;
 }
 );
 setProduct(sortedProducts);  
 }
 
-discountHigh=()=>{
-  const sortedProducts = [...product].sort((a, b) => {
-    return b.discount - a.discount;
-}
-);
-setProduct(sortedProducts); 
-}
+
+
 
   return (
     <ScrollView>
@@ -104,7 +96,7 @@ setProduct(sortedProducts);
                 paddingLeft: 10,
               }}
             >
-              {item.category}
+              {search}
             </Text>
           </View>
           <View style={{ flexDirection: "row", padding: 5 }}>
@@ -124,10 +116,6 @@ setProduct(sortedProducts);
       </ImageBackground>
       <ScrollView horizontal={true}>
         <View style={{flexDirection:"row",paddingVertical:10,justifyContent:"space-between"}} >
-        <TouchableOpacity   style={{flexDirection:"row", borderRadius:10, borderColor:"#EBEDF0",backgroundColor:"#EBEDF0", paddingVertical:3, paddingHorizontal:6, borderWidth:1,marginHorizontal:5}}>
-        <FontAwesome name="filter" size={16} color="gray" style={{paddingTop:2}}/>
-        <Text style={{paddingLeft:3}}>Filters</Text>
-        </TouchableOpacity>
         <TouchableOpacity onPress={()=>{console.log("Sort"); priceLow()}} style={{flexDirection:"row", borderRadius:10, borderColor:"#EBEDF0",backgroundColor:"#EBEDF0", paddingVertical:3, paddingHorizontal:6, borderWidth:1,marginHorizontal:5}}>
         <FontAwesome name="sort-amount-asc" size={14} color="gray" style={{paddingTop:2}} />
         <Text style={{paddingLeft:3}}>Price:Low to high</Text>
@@ -136,10 +124,7 @@ setProduct(sortedProducts);
         <FontAwesome name="sort-amount-desc" size={14} color="gray" style={{paddingTop:2}}/>
         <Text style={{paddingLeft:3}}>Price:High to Low</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=>{console.log("Sort"); discountHigh()}} style={{flexDirection:"row", borderRadius:10, borderColor:"#EBEDF0",backgroundColor:"#EBEDF0", paddingVertical:3, paddingHorizontal:6, borderWidth:1,marginHorizontal:5}}>
-        <FontAwesome name="sort-amount-asc" size={14} color="gray" style={{paddingTop:2}}/>
-        <Text style={{paddingLeft:3}}>Discount:high to Low</Text>
-        </TouchableOpacity>
+        
         <TouchableOpacity onPress={()=>{console.log("Sort"); nameLow()}} style={{flexDirection:"row", borderRadius:10, borderColor:"#EBEDF0",backgroundColor:"#EBEDF0", paddingVertical:3, paddingHorizontal:6, borderWidth:1,marginHorizontal:5}}>
         <FontAwesome name="sort-alpha-asc" size={14} color="gray" style={{paddingTop:2}} />
         <Text style={{paddingLeft:3}}>Asc:A to Z</Text>
@@ -165,9 +150,9 @@ setProduct(sortedProducts);
       >
         <FlatList
           data={product}
-          renderItem={({ item }) => <ProductCard item={item} />}
+          renderItem={({ item }) => <SearchProductCard item={item} />}
           scrollEnabled={false}
-          keyExtractor={(item) => item.item_id}
+          keyExtractor={(item) => item.name}
           numColumns={2}
         />
       </View>
@@ -175,7 +160,7 @@ setProduct(sortedProducts);
   );
 }
 
-export default ProductList;
+export default SearchProductList;
 
 const style = StyleSheet.create({
   headerView: {
