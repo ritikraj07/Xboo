@@ -5,16 +5,26 @@ import {
   Image,
   Button,
   FlatList,
-  StyleSheet, ImageBackground,
+  StyleSheet,
+  ImageBackground,
   TouchableOpacity,
   ScrollView,
 } from "react-native";
 
-import { Feather, MaterialCommunityIcons, Ionicons, AntDesign } from "@expo/vector-icons";
+import {
+  Feather,
+  MaterialCommunityIcons,
+  Ionicons,
+  AntDesign,
+} from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
+<<<<<<< HEAD
+import { AirbnbRating } from "@rneui/themed";
+=======
 import { AirbnbRating } from '@rneui/themed';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+>>>>>>> 5d38616189aa4a7030818e4814c7af66a770221b
 
 function ProductDescription({ navigation }) {
   const route = useRoute();
@@ -72,19 +82,26 @@ function ProductDescription({ navigation }) {
         resizeMode="cover"
         style={{ flex: 1, justifyContent: "center" }}
       >
-        <View
-          style={styles.headerView}
-        >
+        <View style={styles.headerView}>
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Ionicons name="arrow-back-sharp" size={24} color="black" style={{ paddingTop: 2 }} /></TouchableOpacity>
-
+              <Ionicons
+                name="arrow-back-sharp"
+                size={24}
+                color="black"
+                style={{ paddingTop: 2 }}
+              />
+            </TouchableOpacity>
           </View>
           <View style={{ flexDirection: "row", padding: 5 }}>
+<<<<<<< HEAD
+            <TouchableOpacity onPress={() => navigation.navigate("SearchCom")}>
+=======
             <TouchableOpacity >
+>>>>>>> 5d38616189aa4a7030818e4814c7af66a770221b
               <Feather name="search" size={22} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("SearchCom")}>
               <MaterialCommunityIcons
                 name="microphone"
                 size={22}
@@ -96,69 +113,149 @@ function ProductDescription({ navigation }) {
         </View>
       </ImageBackground>
 
+<<<<<<< HEAD
+      <View
+        style={{
+          paddingHorizontal: 15,
+          paddingVertical: 15,
+          backgroundColor: "white",
+        }}
+      >
+        <TouchableOpacity
+          style={{ alignItems: "flex-end", paddingRight: 10 }}
+          onPress={() => setwishlist(!wishlist)}
+        >
+          {wishlist ? (
+            <AntDesign name="heart" size={24} color="red" />
+          ) : (
+            <AntDesign name="hearto" size={24} color="#EBEDF0" />
+          )}
+=======
 
       <View style={{ paddingHorizontal: 15, paddingVertical: 15, backgroundColor: "white"}}>
         <TouchableOpacity style={{ alignItems: "flex-end", paddingRight: 10 }} onPress={() => AddtoWishList()}>
           {wishlist ? <AntDesign name="heart" size={24} color="red" /> : <AntDesign name="hearto" size={24} color="#EBEDF0" />}
+>>>>>>> 5d38616189aa4a7030818e4814c7af66a770221b
         </TouchableOpacity>
-        <Image source={{ uri: item?.image }} style={styles.image} resizeMode="contain" />
+        <Image
+          source={{ uri: item?.image }}
+          style={styles.image}
+          resizeMode="contain"
+        />
         <View style={styles.details}>
           <Text style={{ color: "gray" }}>{item?.category_name}</Text>
           <Text style={styles.name}>{item.description}</Text>
 
+<<<<<<< HEAD
+          <View
+            style={{
+              flexDirection: "row",
+              paddingBottom: 5,
+              paddingVertical: 8,
+            }}
+          >
+            <AirbnbRating
+              defaultRating={item.stars}
+              isDisabled={true}
+              showRating={false}
+              size={20}
+            />
+            <Text
+              style={styles.rating}
+            >{`${item?.hidden_stars} (${item?.ratings})`}</Text>
+=======
           <View style={{ flexDirection: "row", paddingBottom: 5, paddingVertical: 8 }}>
             <AirbnbRating defaultRating={item.stars} isDisabled={true} showRating={false} size={20} />
             <Text style={styles.rating}>{item?.hidden_stars} ({item.ratings != undefined ? item.ratings : Math.floor(Math.random() * 100) + 10 })</Text>
 
+>>>>>>> 5d38616189aa4a7030818e4814c7af66a770221b
           </View>
-          <Text style={{
-            fontSize: 12,
-            color: 'green', paddingBottom: 5
-          }}>{item?.delivery_type}</Text>
-          <View style={{ backgroundColor: "#E6F0FF", padding: 10 }}>
-            <Text style={{
+          <Text
+            style={{
               fontSize: 12,
-              color: 'green',
+              color: "green",
+              paddingBottom: 5,
+            }}
+          >
+            {item?.delivery_type}
+          </Text>
+          <View style={{ backgroundColor: "#E6F0FF", padding: 10 }}>
+            <Text
+              style={{
+                fontSize: 12,
+                color: "green",
 
-              marginRight: 10
-            }}>Special Price</Text>
-            <View style={{ flexDirection: "row", paddingTop: 5, paddingLeft: 5 }}>
-
-              <Text style={{
-                fontSize: 20,
-                color: 'green',
-                marginTop: 4,
-                fontWeight: "bold",
-                marginRight: 10
-              }}>{`${item?.discount}% off`}</Text>
-              <Text style={{
-                fontSize: 18,
-                color: 'gray',
-                marginTop: 4,
-                fontWeight: "bold",
-                textDecorationLine: 'line-through',
-                marginRight: 10
-              }}>₹{item?.old_price}</Text>
-
-              <Text style={styles.price}>
-                ₹{item?.new_price}
+                marginRight: 10,
+              }}
+            >
+              Special Price
+            </Text>
+            <View
+              style={{ flexDirection: "row", paddingTop: 5, paddingLeft: 5 }}
+            >
+              <Text
+                style={{
+                  fontSize: 20,
+                  color: "green",
+                  marginTop: 4,
+                  fontWeight: "bold",
+                  marginRight: 10,
+                }}
+              >{`${item?.discount}% off`}</Text>
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: "gray",
+                  marginTop: 4,
+                  fontWeight: "bold",
+                  textDecorationLine: "line-through",
+                  marginRight: 10,
+                }}
+              >
+                ₹{item?.old_price}
               </Text>
+
+              <Text style={styles.price}>₹{item?.new_price}</Text>
             </View>
           </View>
-          <Text style={{ fontWeight: "bold", fontSize: 13, paddingTop: 4 }}>Buy Now and Pay ₹{item?.new_price} next month using Pay Later</Text>
+          <Text style={{ fontWeight: "bold", fontSize: 13, paddingTop: 4 }}>
+            Buy Now and Pay ₹{item?.new_price} next month using Pay Later
+          </Text>
         </View>
-
       </View>
       <View style={{ flexDirection: "row", flex: 1 }}>
+<<<<<<< HEAD
+        <TouchableOpacity style={{ flex: 1, height: 40, paddingVertical: 10 }}>
+          <Text
+            style={{ alignSelf: "center", fontSize: 15, fontWeight: "bold" }}
+          >
+            Add to Cart
+          </Text>
+=======
         <TouchableOpacity disabled={cartbtm} style={{ flex: 1, height: 40, paddingVertical: 10 }} onPress={()=>AddtoCart()} >
           <Text style={{ alignSelf: "center", fontSize: 15, fontWeight: "bold", }}>{cartbtm?"Added to Cart":"Add to Cart"}</Text>
+>>>>>>> 5d38616189aa4a7030818e4814c7af66a770221b
         </TouchableOpacity>
-        <TouchableOpacity style={{ flex: 1, backgroundColor: "orange", height: 40, paddingVertical: 10 }}>
-          <Text style={{ alignSelf: "center", fontSize: 15, fontWeight: "bold", color: "white" }}>Buy Now</Text>
-
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            backgroundColor: "orange",
+            height: 40,
+            paddingVertical: 10,
+          }}
+        >
+          <Text
+            style={{
+              alignSelf: "center",
+              fontSize: 15,
+              fontWeight: "bold",
+              color: "white",
+            }}
+          >
+            Buy Now
+          </Text>
         </TouchableOpacity>
       </View>
-
     </ScrollView>
   );
 }
@@ -167,22 +264,20 @@ export default ProductDescription;
 
 const styles = StyleSheet.create({
   headerView: {
-
     flexDirection: "row",
     height: 60,
     padding: 15,
     justifyContent: "space-between",
   },
 
-
   image: {
-    width: '100%',
+    width: "100%",
     height: 350,
   },
   details: {
     paddingVertical: 10,
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   name: {
     fontSize: 16,
@@ -193,13 +288,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginTop: 4,
-    marginRight: 10
+    marginRight: 10,
   },
   rating: {
     fontSize: 15,
-    color: '#888',
+    color: "#888",
 
     marginLeft: 12,
-    marginTop: 4
+    marginTop: 4,
   },
 });

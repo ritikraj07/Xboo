@@ -3,7 +3,8 @@ import {
   View,
   Text,
   Image,
-  StyleSheet,ImageBackground,
+  StyleSheet,
+  ImageBackground,
   TouchableOpacity,
   ScrollView,
 } from "react-native";
@@ -12,7 +13,7 @@ import { moreCategory, category } from "../Data/category";
 import { useNavigation } from "@react-navigation/native";
 
 function Product(props) {
-  const navigation=useNavigation();
+  const navigation = useNavigation();
 
   return (
     <ScrollView>
@@ -23,32 +24,34 @@ function Product(props) {
         resizeMode="cover"
         style={{ flex: 1, justifyContent: "center" }}
       >
-      <View
-        style={style.headerView}
-      >
-        <Text style={{ fontSize: 20, color: "black",fontWeight:500, }}>All categories</Text>
-        <View style={{ flexDirection: "row", padding: 5 }}>
-          <TouchableOpacity>
-            <Feather name="search" size={22} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <MaterialCommunityIcons
-              name="microphone"
-              size={22}
-              color="black"
-              style={{ paddingLeft: 15 }}
-            />
-          </TouchableOpacity>
+        <View style={style.headerView}>
+          <Text style={{ fontSize: 20, color: "black", fontWeight: 500 }}>
+            All categories
+          </Text>
+          <View style={{ flexDirection: "row", padding: 5 }}>
+            <TouchableOpacity onPress={() => navigation.navigate("SearchCom")}>
+              <Feather name="search" size={22} color="black" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("SearchCom")}>
+              <MaterialCommunityIcons
+                name="microphone"
+                size={22}
+                color="black"
+                style={{ paddingLeft: 15 }}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
       </ImageBackground>
 
       <View style={style.containerView}>
         {category.map((item, index) => {
           return (
-            <TouchableOpacity key={index} style={style.TouchIcon} onPress={() =>
-              navigation.navigate('productList', {item})
-            }>
+            <TouchableOpacity
+              key={index}
+              style={style.TouchIcon}
+              onPress={() => navigation.navigate("productList", { item })}
+            >
               <Image source={{ uri: item.icon }} style={style.iconImage} />
               <Text style={style.iconText}>{item.category}</Text>
             </TouchableOpacity>
@@ -58,15 +61,13 @@ function Product(props) {
 
       <View style={{ padding: 10, paddingTop: 20 }}>
         <View style={{ flexDirection: "row" }}>
-          <Text style={{ fontSize: 18,fontWeight:500, }}>More on Xcell</Text>
+          <Text style={{ fontSize: 18, fontWeight: 500 }}>More on Xcell</Text>
           <View style={style.hLView}></View>
         </View>
-        <View
-          style={style.containerView}
-        >
+        <View style={style.containerView}>
           {moreCategory.map((item, index) => {
             return (
-              <TouchableOpacity key={index} style={style.TouchIcon} >
+              <TouchableOpacity key={index} style={style.TouchIcon}>
                 <Image source={{ uri: item.icon }} style={style.iconImage} />
                 <Text style={style.iconText}>{item.category}</Text>
               </TouchableOpacity>
@@ -81,13 +82,12 @@ function Product(props) {
 export default Product;
 
 const style = StyleSheet.create({
-    headerView:{
-        
-          flexDirection: "row",
-          height: 60,
-          padding: 15,
-          justifyContent: "space-between",
-    },
+  headerView: {
+    flexDirection: "row",
+    height: 60,
+    padding: 15,
+    justifyContent: "space-between",
+  },
   containerView: {
     flexDirection: "row",
     paddingTop: 20,
@@ -108,15 +108,14 @@ const style = StyleSheet.create({
   iconText: {
     alignSelf: "center",
     paddingTop: 5,
-    fontWeight:500,
+    fontWeight: 500,
   },
 
-  hLView:{
-    marginTop:15,
-    borderTopWidth:1,
-    borderTopColor:"#BDBDBD",
-    width:200,
-    marginLeft:15,
-    
-  }
+  hLView: {
+    marginTop: 15,
+    borderTopWidth: 1,
+    borderTopColor: "#BDBDBD",
+    width: 200,
+    marginLeft: 15,
+  },
 });
