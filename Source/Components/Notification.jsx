@@ -3,7 +3,6 @@ import { Animated, Text, View, StyleSheet, ScrollView, TouchableOpacity } from '
 import { Icon } from '@rneui/themed';
 function Notification({ Hpadding, wid, off }) {
     
-
     return (
         <Animated.View style={[styels.Noti, { paddingHorizontal: Hpadding, width: wid }]}>
             <View style={{

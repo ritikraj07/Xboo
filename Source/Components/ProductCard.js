@@ -1,49 +1,47 @@
 import React from "react";
 import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
-import { AirbnbRating } from "@rneui/themed";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { AntDesign } from "@expo/vector-icons";
+    View,
+    Text,
+    Image,
+    StyleSheet,
+    TouchableOpacity,
+    ScrollView,
+  } from "react-native";
+  import { AirbnbRating } from '@rneui/themed';
+  import { useNavigation, useRoute } from "@react-navigation/native";
+  import { AntDesign } from '@expo/vector-icons';
+  import firestore from '@react-native-firebase/firestore';
+  import auth from '@react-native-firebase/auth';
 
-export default function ProductCard({ item }) {
-  const [wishlist, setwishlist] = React.useState(false);
-  const navigation = useNavigation();
-  /*const [product,setProduct]=React.useState({});
-  
+export default function ProductCard({item}) {
+  const [wishlist, setwishlist]=React.useState(false);
+  const navigation=useNavigation();
 
-  React.useEffect(()=>{
-    fetch(url)
-    .then((res)=>res.json())
-    .then((data)=>{setProduct(data); console.log(data)})
-    .catch(err=>console.log(err));
-  },[])*/
+  async function AddtoWishList() {
+    let Auth = auth()._authResult
+    if (!Auth) {
+      Alert.alert('XBoo!  Message', "You haven't login baby \n LogIn first!",)
+      navigation.navigate('EmailAuth')
+    } else {
+      const user = await firestore().collection(auth()._user.uid).doc('WishList').get();
+      firestore().collection(auth()._user.uid).doc('WishList')
+        .set({ "wishlist": user._exists ? [...user._data?.wishlist, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
+        .then((e) => {
+          // console.log(e);
+          setwishlist(true)
+        }).catch((e) => {
+          // console.log(e)
+        })
+    }
+  }
+
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => navigation.navigate("productdesc", { item })}
-    >
-      <TouchableOpacity
-        style={{ alignItems: "flex-end" }}
-        onPress={() => setwishlist(true)}
-      >
-        {wishlist ? (
-          <AntDesign name="heart" size={20} color="red" />
-        ) : (
-          <AntDesign name="hearto" size={20} color="#EBEDF0" />
-        )}
-      </TouchableOpacity>
-      <Image
-        source={{ uri: item?.image }}
-        style={styles.image}
-        resizeMode="contain"
-      />
+    <TouchableOpacity style={styles.container} onPress={() =>navigation.navigate('productdesc', {item}) }>
+      <TouchableOpacity style={{ alignItems: "flex-end" }} onPress={() => AddtoWishList()}>
+     {wishlist? <AntDesign name="heart" size={20} color="red" />:<AntDesign name="hearto" size={20} color="#EBEDF0" />}
+     </TouchableOpacity>
+      <Image source={{ uri: item?.image }} style={styles.image} resizeMode="contain" />
       <View style={styles.details}>
         <Text style={styles.name}>
           {item.description.length > 40
@@ -85,12 +83,13 @@ export default function ProductCard({ item }) {
 
 const styles = StyleSheet.create({
   container: {
-    width: 175,
-    backgroundColor: "white",
-    paddingTop: 10,
-    padding: 5,
-    borderWidth: 0.5,
-    borderColor: "#EBEDF0",
+    width:'50%',
+    backgroundColor: 'white',
+    paddingTop:10,
+    paddingHorizontal:15,
+    borderWidth:0.5,
+    borderColor:"#EBEDF0"
+   
   },
   image: {
     width: 155,
