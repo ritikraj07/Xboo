@@ -19,11 +19,10 @@ export default SignUp = () => {
   const [value, onChangeText] = React.useState("");
   const navigation = useNavigation();
 
-  useEffect(() => {
-    console.log(auth()._user)
-    // if (auth()._authResult) {
-    //   navigation.navigate("BottomTab")
-    // }
+  useEffect(() => {    
+    if (auth()._user== true) {
+      navigation.navigate("BottomTab")
+    }
   }, [])
 
   async function signInWithPhoneNumber(value) {

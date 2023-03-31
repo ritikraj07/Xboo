@@ -20,10 +20,10 @@ export default EmailAuth = () => {
   const [pass, onChangepass] = React.useState("");
   const navigation=useNavigation();
   useEffect(() => {
-    console.log(auth()._user)
-    // if (auth()._authResult) {
-    //   navigation.navigate("BottomTab")
-    // }
+    
+    if (auth()._user == true) {
+      navigation.navigate("BottomTab")
+    }
   }, [])
   const SignIn=()=>{
     auth()
