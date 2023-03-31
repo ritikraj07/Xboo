@@ -114,7 +114,7 @@ const Profile = ({ navigation }) => {
         .then(() => {
           console.log('User signed out!')
           setAuth(false)
-          navigation.navigate('Home')
+          navigation.navigate('SignUp')
           
         })
         .catch((e) => {
@@ -126,12 +126,7 @@ const Profile = ({ navigation }) => {
     }
   };
 
-  const renderOrderItem = ({ item }) => (
-    <View style={styles.orderItem}>
-      <Text style={styles.orderDate}>{item.date}</Text>
-      <Text style={styles.orderTotal}>Total: ${item.total}</Text>
-    </View>
-  );
+
 
   return (
     <View style={styles.container}>

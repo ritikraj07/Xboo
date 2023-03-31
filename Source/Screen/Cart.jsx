@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, Alert } from 'react';
 import { Text, Image, Button, Icon } from '@rneui/themed';
 import { View, StyleSheet, ImageBackground, TouchableOpacity, Animated, Dimensions, FlatList, ScrollView, TextInput } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import Constants from 'expo-constants';
+
 
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconsM from 'react-native-vector-icons/MaterialIcons';
-import Notification from '../Components/Notification';
+
 const phWidth = Dimensions.get('window').width;
 export default function Cart({ navigation }) {
   const [no_of_notification, set_no_of_notification] = useState(3)
@@ -22,33 +22,26 @@ export default function Cart({ navigation }) {
     Animated.spring(Hpadding, { toValue: 0, overshootClamping: true, useNativeDriver: false }).start()
     Animated.spring(wid, { toValue: 0, overshootClamping: true, useNativeDriver: false }).start()
   }
-  const [cart, setCart] = useState([{
-    "category_id": 3,
-    "category_name": "mobiles",
-    "image": "https://i.ibb.co/6bZc0zJ/f6b32d514024.jpg",
-    "description": "realme 9 (Stargaze White, 128 GB)",
-    "stars": 4.3,
-    "ratings": "4,161 Ratings ",
-    "reviews": " 310 Reviews",
-    "warranty": "1 Year Manufacturer Warranty for Phone and 6 Months Warranty for In-Box Accessories",
-    "new_price": 1799,
-    "old_price": 2999,
-    "discount": 40,
-    "delivery_type": "Free delivery",
-    "offer": "₹16,750",
-    "offer2": " O",
-    "qun":1
-  }]);
+  const [cart, setCart] = useState([]);
   useEffect(()=>{
-    let Auth = true
+    let Auth = auth()._authResult
     if (!Auth) {
       Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kare phir istam kara",)
       navigation.navigate('EmailAuth')
     } else {
-      // firestore().collection(auth()._user.uid)?.doc('Cart')?.get()
-      //   .then((rs) => {
-      //     setCart(rs)
-      // })
+      if (auth()._user) {
+        firestore().collection(auth()._user.uid)?.doc('Cart')?.get()
+          .then((rs) => {
+            if (rs._data.cart) {
+              setCart(rs._data.cart)
+            } else {
+              setCart([])
+            }
+            
+            console.log("data -> ", rs._data.cart)
+          })
+      }
+      
         
     }
   }, [])
@@ -64,7 +57,7 @@ export default function Cart({ navigation }) {
       setCart(updatedCart);
       firestore()
         .collection(auth()._user.uid).doc('Cart')
-        .set(updatedCart)
+        .set({cart: updatedCart})
         .then((e) => {
           // console.log(e);
         }).catch((e) => {
@@ -78,7 +71,7 @@ export default function Cart({ navigation }) {
       setCart(updatedCart);
       firestore()
         .collection(auth()._user.uid).doc('Cart')
-        .set(updatedCart)
+        .set({ cart: updatedCart })
         .then((e) => {
           // console.log(e);
         }).catch((e) => {
@@ -133,7 +126,7 @@ export default function Cart({ navigation }) {
           </View>
         </View>
       </ImageBackground>
-    {cart.length==0? (
+    {cart.length ==0 ? (
       <View style={styles.emptyCartContainer}>
         <Image
           source={{ uri: "https://pic.onlinewebfonts.com/svg/img_171562.png" }}
@@ -152,7 +145,7 @@ export default function Cart({ navigation }) {
               data={cart}
               renderItem={item}
               ItemSeparatorComponent={() => <View style={styles.separator}></View>}
-              ListFooterComponent={() => <Button title="Proceed to Buy" style={{ width: 230, alignSelf: 'center', paddingBottom: 20 }} />}
+              ListFooterComponent={() => <Button onPress={()=> navigation.navigate('Address') } title="Proceed to Buy" style={{ width: 230, alignSelf: 'center', paddingBottom: 20 }} />}
             />
 
           </ScrollView>
@@ -162,15 +155,6 @@ export default function Cart({ navigation }) {
   );
 }
 
-function Location() {
-  const [location, setLocation] = useState(null);
-  return (
-    <View style={styles.locationContainer}>
-      <IconsM size={22} name='location-on' />
-      <Text>Check for delivery availability</Text>
-    </View>
-  );
-}
 
 let styles = StyleSheet.create({
   flex:{

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect}  from "react";
 import {
   View,
   Text,
@@ -19,13 +19,18 @@ export default EmailAuth = () => {
   const [email, onChangeText] = React.useState("");
   const [pass, onChangepass] = React.useState("");
   const navigation=useNavigation();
-
+  useEffect(() => {
+    console.log(auth()._user)
+    // if (auth()._authResult) {
+    //   navigation.navigate("BottomTab")
+    // }
+  }, [])
   const SignIn=()=>{
     auth()
     .createUserWithEmailAndPassword(email, pass)
     .then(() => {
       console.log('User account created & signed in!');
-      navigation.navigate('Home')
+      navigation.navigate('BottomTab')
     })
     .catch(error => {
       if (error.code === 'auth/email-already-in-use') {
@@ -33,7 +38,7 @@ export default EmailAuth = () => {
         auth().signInWithEmailAndPassword(email, pass)
           .then((res) => {
             console.log(res)
-            navigation.navigate('Home')
+            navigation.navigate("BottomTab");
           }).catch((res) => {
             console(res)
           })
@@ -58,7 +63,7 @@ export default EmailAuth = () => {
       style={{ flex: 1,height:1000}}
     >
       <View style={{paddingVertical: 10 }}>
-          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+          <TouchableOpacity onPress={() => navigation.goBack() }>
             <Entypo name="cross" size={28} color="black" />
           </TouchableOpacity>
 
