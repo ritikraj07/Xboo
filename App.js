@@ -20,6 +20,12 @@ import ProductDescription from './Source/Components/ProductDescription';
 import SearchproductCard from './Source/Components/SearchproductCard';
 import SearchProductList from './Source/Components/SearchProductList';
 import SearchProductDescription from './Source/Components/SearchProductDes';
+import AddressForm from './Source/Components/Address';
+import Payment from './Source/Components/Payment';
+import Sp from './Source/Components/PaymentSuccesful';
+
+
+
 
 function BottomTabs() {
   return <Tab.Navigator
@@ -62,17 +68,19 @@ function BottomTabs() {
 
 function MyStack() {
   return (<Stack.Navigator screenOptions={{ headerShown: false }}>
-    
+    <Stack.Screen name="SignUp" component={SignUp} />
+    <Stack.Screen name="EmailAuth" component={EmailAuth} />
     <Stack.Screen name="BottomTab" component={BottomTabs} />
     <Stack.Screen name="SearchCom" component={SearchCom} />
-    <Stack.Screen name="SignUp" component={SignUp} />
     <Stack.Screen name="PhoneOtp" component={PhoneOtp} />
-    <Stack.Screen name="EmailAuth" component={EmailAuth} />
     <Stack.Screen name="productList" component={ProductList} />
     <Stack.Screen name="productdesc" component={ProductDescription} />
     <Stack.Screen name="Searchproductdesc" component={SearchProductDescription} />
     <Stack.Screen name="SearchproductList" component={SearchProductList} />
-    
+    <Stack.Screen name="Address" component={AddressForm} />
+    <Stack.Screen name="Payment" component={Payment} />
+    <Stack.Screen name="Sp" component={Sp} />
+
   </Stack.Navigator>)
 }
 
