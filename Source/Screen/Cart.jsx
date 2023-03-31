@@ -23,27 +23,15 @@ export default function Cart({ navigation }) {
     Animated.spring(wid, { toValue: 0, overshootClamping: true, useNativeDriver: false }).start()
   }
   const [cart, setCart] = useState([]);
-  useEffect(()=>{
-    let Auth = auth()._authResult
-    if (!Auth) {
-      Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kare phir istam kara",)
-      navigation.navigate('EmailAuth')
-    } else {
-      if (auth()._user) {
-        firestore().collection(auth()._user.uid)?.doc('Cart')?.get()
-          .then((rs) => {
-            if (rs._data.cart) {
-              setCart(rs._data.cart)
-            } else {
-              setCart([])
-            }
-            
-            console.log("data -> ", rs._data.cart)
-          })
-      }
-      
-        
-    }
+  useEffect(() => {
+    firestore().collection(auth()._user.uid)?.doc('Cart')?.get()
+      .then((rs) => {
+        if (rs._data.cart) {
+          setCart(rs._data.cart)
+        } else {
+          setCart([])
+        }
+      })
   }, [])
 
   function QtySelect({ qty, index }) {
@@ -57,7 +45,7 @@ export default function Cart({ navigation }) {
       setCart(updatedCart);
       firestore()
         .collection(auth()._user.uid).doc('Cart')
-        .set({cart: updatedCart})
+        .set({ cart: updatedCart })
         .then((e) => {
           // console.log(e);
         }).catch((e) => {
@@ -105,7 +93,7 @@ export default function Cart({ navigation }) {
 
   return (
     <View>
-      
+
       <ImageBackground
         source={{
           uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTU9R3q8guKFAt-fsNfc_7AN6a_o9tQxsAGXnbPDNbuvndQfusFQRHl3wCLAzGRIL0Pr_M&usqp=CAU",
@@ -126,40 +114,40 @@ export default function Cart({ navigation }) {
           </View>
         </View>
       </ImageBackground>
-    {cart.length ==0 ? (
-      <View style={styles.emptyCartContainer}>
-        <Image
-          source={{ uri: "https://pic.onlinewebfonts.com/svg/img_171562.png" }}
-          style={styles.emptyCartImage}
-          resizeMode="contain"
-        />
-        <Text>Your Cart is Empty</Text>
-      </View>
-    ) : (
-          <ScrollView>
-            <View style={{ padding: 10 }}>
-              <Text>SubTotal ₹{cart.reduce((ac, e) => { return ac + e.new_price * e.qun }, 0)}.0</Text>
-              <Text>Your order is eligible for Delivery</Text>
-            </View>
-            <FlatList
-              data={cart}
-              renderItem={item}
-              ItemSeparatorComponent={() => <View style={styles.separator}></View>}
-              ListFooterComponent={() => <Button onPress={()=> navigation.navigate('Address') } title="Proceed to Buy" style={{ width: 230, alignSelf: 'center', paddingBottom: 20 }} />}
-            />
+      {cart.length == 0 ? (
+        <View style={styles.emptyCartContainer}>
+          <Image
+            source={{ uri: "https://pic.onlinewebfonts.com/svg/img_171562.png" }}
+            style={styles.emptyCartImage}
+            resizeMode="contain"
+          />
+          <Text>Your Cart is Empty</Text>
+        </View>
+      ) : (
+        <ScrollView>
+          <View style={{ padding: 10 }}>
+            <Text>SubTotal ₹{cart.reduce((ac, e) => { return ac + e.new_price * e.qun }, 0)}.0</Text>
+            <Text>Your order is eligible for Delivery</Text>
+          </View>
+          <FlatList
+            data={cart}
+            renderItem={item}
+            ItemSeparatorComponent={() => <View style={styles.separator}></View>}
+            ListFooterComponent={() => <Button onPress={() => navigation.navigate('Address')} title="Proceed to Buy" style={{ width: 230, alignSelf: 'center', paddingBottom: 20 }} />}
+          />
 
-          </ScrollView>
-    )}
-  </View>
+        </ScrollView>
+      )}
+    </View>
 
   );
 }
 
 
 let styles = StyleSheet.create({
-  flex:{
-    flexDirection:'row',
-    alignItems:'center'
+  flex: {
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   banner: {
     flexDirection: 'row',
@@ -167,24 +155,24 @@ let styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingRight: 10
   },
-  prodImg:{
+  prodImg: {
     aspectRatio: 1,
-  width: 100,
-  height: 150,
+    width: 100,
+    height: 150,
   },
-  cartItem:{
+  cartItem: {
     // borderWidth:1,
-    paddingTop:15,
-    padding:10,
-    alignItems:'center',
+    paddingTop: 15,
+    padding: 10,
+    alignItems: 'center',
   },
-  separator:{
+  separator: {
     width: '90%',
-    alignSelf:'center',
-    borderColor:'#989898',
-    borderBottomWidth:2,
-    margin:0
-  },container: {
+    alignSelf: 'center',
+    borderColor: '#989898',
+    borderBottomWidth: 2,
+    margin: 0
+  }, container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
     paddingTop: 30,
@@ -287,22 +275,22 @@ let styles = StyleSheet.create({
 })
 
 
- 
+
 async function AddtoCart() {
-    let Auth = auth()._user
-    if (!Auth) {
-      Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kare phir istam kara",)
-      navigation.navigate('EmailAuth')
-    } else {
-      const user = await firestore().collection(auth()._user.uid).doc('Cart').get();
-      firestore()
-        .collection(auth()._user.uid).doc('Cart')
-        .set({ "cart": user._exists ? [...user._data?.cart, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
-        .then((e) => {
-          // console.log(e);
-          setcartbtm(true)
-        }).catch((e) => {
-          // console.log(e)
-        })
-    }
+  let Auth = auth()._user
+  if (!Auth) {
+    Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kare phir istam kara",)
+    navigation.navigate('EmailAuth')
+  } else {
+    const user = await firestore().collection(auth()._user.uid).doc('Cart').get();
+    firestore()
+      .collection(auth()._user.uid).doc('Cart')
+      .set({ "cart": user._exists ? [...user._data?.cart, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
+      .then((e) => {
+        // console.log(e);
+        setcartbtm(true)
+      }).catch((e) => {
+        // console.log(e)
+      })
   }
+}
