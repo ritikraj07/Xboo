@@ -14,30 +14,37 @@ import { useNavigation } from "@react-navigation/native";
 import { Button } from "@rneui/themed";
 import { Entypo } from "@expo/vector-icons";
 import auth from '@react-native-firebase/auth';
+import setData from "../AsyncStorage/Setter";
+import getData from "../AsyncStorage/Getter";
 
 export default EmailAuth = () => {
   const [email, onChangeText] = React.useState("");
   const [pass, onChangepass] = React.useState("");
   const navigation=useNavigation();
   useEffect(() => {
-    
-    if (auth()._user == true) {
-      navigation.navigate("BottomTab")
-    }
+    getData('isLogin').then((res) => {
+      if (res == 'true') {
+          navigation.navigate("BottomTab")
+      }
+    })
+    // if (auth()._user == true) {
+    //   navigation.navigate("BottomTab")
+    // }
   }, [])
   const SignIn=()=>{
     auth()
     .createUserWithEmailAndPassword(email, pass)
     .then(() => {
-      console.log('User account created & signed in!');
+      // console.log('User account created & signed in!');
+      setData('isLogin', 'true')
       navigation.navigate('BottomTab')
     })
     .catch(error => {
       if (error.code === 'auth/email-already-in-use') {
-        console.log('That email address is already in use!');
+        // console.log('That email address is already in use!');
         auth().signInWithEmailAndPassword(email, pass)
           .then((res) => {
-            console.log(res)
+            setData('isLogin', 'true')
             navigation.navigate("BottomTab");
           }).catch((res) => {
             console(res)
@@ -46,10 +53,10 @@ export default EmailAuth = () => {
       }
   
       if (error.code === 'auth/invalid-email') {
-        console.log('That email address is invalid!');
+        // console.log('That email address is invalid!');
       }
   
-      console.error(error);
+      // console.error(error);
     });
   }
 

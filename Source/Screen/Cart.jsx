@@ -131,6 +131,7 @@ export default function Cart({ navigation }) {
           </View>
           <FlatList
             data={cart}
+            scrollEnabled={false}
             renderItem={item}
             ItemSeparatorComponent={() => <View style={styles.separator}></View>}
             ListFooterComponent={() => <Button onPress={() => navigation.navigate('Address')} title="Proceed to Buy" style={{ width: 230, alignSelf: 'center', paddingBottom: 20 }} />}
