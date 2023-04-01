@@ -14,24 +14,28 @@ import { useNavigation } from "@react-navigation/native";
 import { Button } from "@rneui/themed";
 import { Entypo } from "@expo/vector-icons";
 import auth from '@react-native-firebase/auth';
+import getData from "../AsyncStorage/Getter";
+import setData from "../AsyncStorage/Setter";
 
 export default SignUp = () => {
   const [value, onChangeText] = React.useState("");
   const navigation = useNavigation();
 
   useEffect(() => {    
-    if (auth()._user== true) {
-      navigation.navigate("BottomTab")
-    }
+    getData('isLogin').then((res) => {
+      if (res == 'true') {
+        navigation.navigate("BottomTab")
+      }
+    })
   }, [])
 
   async function signInWithPhoneNumber(value) {
     try {
       const confirm = await auth().signInWithPhoneNumber(`+91${value}`);
       navigation.navigate('PhoneOtp', { confirm })
-      console.log(confirm)
+      // console.log(confirm)
     } catch (e) {
-      console.log(e)
+      // console.log(e)
     }
     
   }

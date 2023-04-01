@@ -14,6 +14,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import auth from '@react-native-firebase/auth';
 import { Button } from "@rneui/themed";
 import { Entypo } from "@expo/vector-icons";
+import setData from "../AsyncStorage/Setter";
 
 export default PhoneOtp = ({phone}) => {
   const [otp, setotp] = React.useState("");
@@ -23,7 +24,8 @@ export default PhoneOtp = ({phone}) => {
   async function confirmCode() {
     try {
       let ans = await confirm.confirm(otp);
-      console.log(ans)
+      // console.log(ans)
+      setData('isLogin', 'true')
       Alert.alert('Sign In Successful', 'Lets Rock baby', [
         {
           text: 'Ok',
@@ -32,7 +34,7 @@ export default PhoneOtp = ({phone}) => {
         },
       ],)
     } catch (error) {
-      console.log('Invalid code.');
+      // console.log('Invalid code.');
     }
   }
   

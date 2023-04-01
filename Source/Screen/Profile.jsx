@@ -20,6 +20,8 @@ import { FontAwesome5 } from 'react-native-vector-icons';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import setData from '../AsyncStorage/Setter';
+
 const image = {
   uri: 'https://static.vecteezy.com/system/resources/previews/004/697/688/original/curve-light-blue-background-abstract-free-vector.jpg',
 };
@@ -108,17 +110,18 @@ const Profile = ({ navigation }) => {
 
   const handleLogout = () => {
     //---------------------------------------------- Handle logout logic---------------------------
+    setData('isLogin', true)
     if (Auth) {
       auth()
         .signOut()
         .then(() => {
-          console.log('User signed out!')
+          // console.log('User signed out!')
           setAuth(false)
           navigation.navigate('SignUp')
           
         })
         .catch((e) => {
-          console.log(e)
+          // console.log(e)
         })
     } else {
       navigation.navigate('SignUp')

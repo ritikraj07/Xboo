@@ -29,10 +29,10 @@ function ProductDescription({ navigation }) {
   const [cartbtm, setcartbtm] = React.useState(false)
  
   async function AddtoCart() {
-      const user = await firestore().collection(auth()._user.uid).doc('Cart').get();
+    const user = await firestore().collection(auth()._user.uid).doc('Cart').get();
       firestore()
         .collection(auth()._user.uid).doc('Cart')
-        .set({ "cart": user._exists ? [...user._data?.cart, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
+        .set({ "cart": user._exists && user._data.cart ? [...user._data?.cart, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
         .then((e) => {
           setcartbtm(true)
         }).catch((e) => {})
@@ -40,7 +40,7 @@ function ProductDescription({ navigation }) {
   async function AddtoWishList() {
       const user = await firestore().collection(auth()._user.uid).doc('WishList').get();
       firestore().collection(auth()._user.uid).doc('WishList')
-        .set({ "wishlist": user._exists ? [...user._data?.wishlist, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
+        .set({ "wishlist": user._exists && user._data.wishlist ? [...user._data?.wishlist, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
         .then((e) => { setwishlist(true) })
         .catch((e) => { })
     }
