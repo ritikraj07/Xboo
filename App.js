@@ -96,7 +96,7 @@ export default function App() {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1}}> 
+    <SafeAreaView style={{ flex: 1, backgroundColor:"white"}}> 
     <ThemeProvider theme={theme}>
       <StatusBar style="auto" />
       <NavigationContainer>

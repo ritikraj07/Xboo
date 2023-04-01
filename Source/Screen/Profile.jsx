@@ -41,29 +41,32 @@ const Profile = ({ navigation }) => {
   ]);
 
   useEffect(() => {
-    let Auth = auth()._user
-    if (Auth) {
-      setAuth(true)
-    } else {
-      setAuth(false)
-    }
-    
-    if (!Auth) {
-      Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kara phir istam kara",)
-      navigation.navigate('EmailAuth')
-    } else {
-      firestore().collection(auth()?._user?.uid).doc('UserData').get()
-        .then((e) => {
-          // console.log(e)
-          setName(e._data.name)
-          setEmail(e._data.email)
-          setPhone(e._data.phone)
-          setAddress(e._data.address)
-        }).catch((e) => {
-          // console.log(e)
-        })
-    }
-  }, [])
+    const unsubscribe = navigation.addListener('focus', () => {
+      let Auth = auth()._user
+      if (Auth) {
+        setAuth(true)
+      } else {
+        setAuth(false)
+      }
+
+      if (!Auth) {
+        Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kara phir istam kara",)
+        navigation.navigate('EmailAuth')
+      } else {
+        firestore().collection(auth()?._user?.uid).doc('UserData').get()
+          .then((e) => {
+            // console.log(e)
+            setName(e._data.name)
+            setEmail(e._data.email)
+            setPhone(e._data.phone)
+            setAddress(e._data.address)
+          }).catch((e) => {
+            // console.log(e)
+          })
+      }
+    });
+    return unsubscribe;
+  }, [navigation])
 
   const handleChooseProfilePic = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -90,9 +93,6 @@ const Profile = ({ navigation }) => {
 
   async function handleSave(){
     setEditMode(false);
-    // ------------------------------------Call API or update data source with new profile information------------
-    
-    //  console.log(user._data?.cart)
     if (Auth) {
       firestore()
         .collection(auth()._user.uid).doc('UserData')

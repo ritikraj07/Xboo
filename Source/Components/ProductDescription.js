@@ -40,7 +40,7 @@ function ProductDescription({ navigation }) {
   async function AddtoWishList() {
       const user = await firestore().collection(auth()._user.uid).doc('WishList').get();
       firestore().collection(auth()._user.uid).doc('WishList')
-        .set({ "wishlist": user._exists && user._data.wishlist ? [...user._data?.wishlist, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
+        .set({ "wishlist": user._exists && user._data?.wishlist ? [...user._data?.wishlist, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
         .then((e) => { setwishlist(true) })
         .catch((e) => { })
     }
