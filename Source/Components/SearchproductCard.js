@@ -10,19 +10,31 @@ import {
 import { AirbnbRating } from "@rneui/themed";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 export default function SearchProductCard({ item }) {
   const [wishlist, setwishlist] = React.useState(false);
   const navigation = useNavigation();
-  /*const [product,setProduct]=React.useState({});
   
+  async function AddtoWishList() {
+    let Auth = auth()._authResult
+    if (!Auth) {
+      Alert.alert('XBoo!  Message', "You haven't login baby \n LogIn first!",)
+      navigation.navigate('EmailAuth')
+    } else {
+      const user = await firestore().collection(auth()._user.uid).doc('WishList').get();
+      firestore().collection(auth()._user.uid).doc('WishList')
+        .set({ "wishlist": user._exists ? [...user._data?.wishlist, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
+        .then((e) => {
+          // console.log(e);
+          setwishlist(true)
+        }).catch((e) => {
+          // console.log(e)
+        })
+    }
+  }
 
-  React.useEffect(()=>{
-    fetch(url)
-    .then((res)=>res.json())
-    .then((data)=>{setProduct(data); console.log(data)})
-    .catch(err=>console.log(err));
-  },[])*/
 
   return (
     <TouchableOpacity
@@ -31,7 +43,7 @@ export default function SearchProductCard({ item }) {
     >
       <TouchableOpacity
         style={{ alignItems: "flex-end" }}
-        onPress={() => setwishlist(true)}
+        onPress={() => AddtoWishList()}
       >
         {wishlist ? (
           <AntDesign name="heart" size={20} color="red" />
