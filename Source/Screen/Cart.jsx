@@ -11,8 +11,11 @@ import IconsM from 'react-native-vector-icons/MaterialIcons';
 const phWidth = Dimensions.get('window').width;
 export default function Cart({ navigation }) {
   const [no_of_notification, set_no_of_notification] = useState(3)
+  const [wishlist, setwishlist] = useState([])
   const Hpadding = useRef(new Animated.Value(0)).current;
   const wid = useRef(new Animated.Value(0)).current;
+  const [cartOrNot, setcartOrNot] = useState(true)
+  const [cart, setCart] = useState([]);
 
   function on() {
     Animated.spring(Hpadding, { toValue: 10, overshootClamping: true, useNativeDriver: false }).start()
@@ -22,17 +25,30 @@ export default function Cart({ navigation }) {
     Animated.spring(Hpadding, { toValue: 0, overshootClamping: true, useNativeDriver: false }).start()
     Animated.spring(wid, { toValue: 0, overshootClamping: true, useNativeDriver: false }).start()
   }
-  const [cart, setCart] = useState([]);
+  
   useEffect(() => {
-    firestore().collection(auth()._user.uid)?.doc('Cart')?.get()
-      .then((rs) => {
-        if (rs._data.cart) {
-          setCart(rs._data.cart)
-        } else {
-          setCart([])
-        }
-      })
-  }, [])
+    const unsubscribe = navigation.addListener('focus', () => {
+      firestore().collection(auth()._user.uid)?.doc('Cart')?.get()
+        .then((rs) => {
+          if (rs._data.cart) {
+            setCart(rs._data.cart)
+          } else {
+            setCart([])
+          }
+        })
+      firestore().collection(auth()._user.uid)?.doc('WishList')?.get()
+        .then((rs) => {
+          if (rs._data.wishlist) {
+            setwishlist(rs._data.wishlist)
+          } else {
+            setwishlist([])
+          }
+        })
+
+    });
+    return unsubscribe;
+
+  }, [navigation])
 
   function QtySelect({ qty, index }) {
     const handleDecrease = () => {
@@ -78,10 +94,10 @@ export default function Cart({ navigation }) {
 
   function item({ item, index }) {
     return <View style={{ ...styles.flex, ...styles.cartItem }}>
-      <View>
+      <TouchableOpacity onPress={() => { navigation.navigate('productdesc', { item }) }} >
         <Image source={{ uri: item.image }} style={{ ...styles.prodImg }} resizeMode='contain' />
-        <QtySelect qty={item.qun} index={index} />
-      </View>
+       <QtySelect qty={item.qun} index={index} />
+      </TouchableOpacity>
       <View style={{ flex: 1 }}>
         <Text>{item.description}</Text>
         <Text>₹{item.new_price}.00</Text>
@@ -90,9 +106,48 @@ export default function Cart({ navigation }) {
       </View>
     </View>
   }
+  function MoveToCart(item, index) {
+    let temp = [...cart, { ...item, qun: 1 }]
+    setCart(temp)
+    firestore()
+      .collection(auth()._user.uid).doc('Cart')
+      .set({ cart: [...cart] })
+      .then((e) => { })
+      .catch((e) => { })
+    let temp2 = [...wishlist]
+    temp2.splice(index, 1)
+    setwishlist(temp2)
+    firestore()
+      .collection(auth()._user.uid).doc('WishList')
+      .set({ wishlist:[...wishlist] })
+      .then((e) => { })
+      .catch((e) => { })
+
+  }
+  function WishListCom({item, index}) {
+    return (
+      <View style={{alignContent:'center', justifyContent:'center', alignItems:'center', marginBottom:10 }} >
+        <View style={{ ...styles.flex, ...styles.cartItem }}  >
+          <TouchableOpacity onPress={() => { navigation.navigate('productdesc', { item }) }} >
+          <Image source={{ uri: item.image }} style={{ ...styles.prodImg }} resizeMode='contain' />
+          </TouchableOpacity>
+        <View style={{ flex: 1 }}>
+          <Text>{item.description}</Text>
+          <Text>₹{item.new_price}.00</Text>
+          <Text>Eligible for Free Shipping</Text>
+          <Text>In stock</Text>
+        </View>
+        </View>
+        <TouchableOpacity style={{borderRadius:10}} onPress={()=>MoveToCart(item, index)} >
+          <Text style={{fontSize:15, fontWeight:600, backgroundColor:'yellow', padding:10, alignSelf:'center'}} >Move to Cart</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+  
 
   return (
-    <View>
+    <View style={{marginBottom:250}} >
 
       <ImageBackground
         source={{
@@ -114,6 +169,15 @@ export default function Cart({ navigation }) {
           </View>
         </View>
       </ImageBackground>
+      <View style={styles.choice} >
+        <TouchableOpacity onPress={() => setcartOrNot(true)} >
+          <Text style={[styles.choiceText, cartOrNot ? { color: 'green' } : { color: 'black' } ]} >Cart</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setcartOrNot(false)} >
+          <Text style={[styles.choiceText, !cartOrNot ? { color: 'green' } : { color: 'black' }]} >WishList</Text>
+        </TouchableOpacity>
+      </View>
+       {cartOrNot?<View>
       {cart.length == 0 ? (
         <View style={styles.emptyCartContainer}>
           <Image
@@ -134,11 +198,38 @@ export default function Cart({ navigation }) {
             scrollEnabled={false}
             renderItem={item}
             ItemSeparatorComponent={() => <View style={styles.separator}></View>}
-            ListFooterComponent={() => <Button onPress={() => navigation.navigate('Address')} title="Proceed to Buy" style={{ width: 230, alignSelf: 'center', paddingBottom: 20 }} />}
+            ListFooterComponent={() => <Button onPress={() => navigation.navigate('Address')} title="Proceed to Buy" style={{ width: 230, alignSelf: 'center', paddingBottom: 20 }} ></Button> }
           />
 
-        </ScrollView>
-      )}
+          </ScrollView>
+          
+
+        )}
+      </View> : <View>
+          {wishlist.length == 0 ? (
+            <View style={styles.emptyCartContainer}>
+              <Image
+                source={{ uri: "https://pic.onlinewebfonts.com/svg/img_171562.png" }}
+                style={styles.emptyCartImage}
+                resizeMode="contain"
+              />
+              <Text>Your wishlist is Empty</Text>
+            </View>
+          ) : (
+            <ScrollView>
+              <FlatList
+                  data={wishlist}
+                scrollEnabled={false}
+                  renderItem={WishListCom}
+                ItemSeparatorComponent={() => <View style={styles.separator}></View>}
+                // ListFooterComponent={() => <Button onPress={() => navigation.navigate('Address')} title="Proceed to Buy" style={{ width: 230, alignSelf: 'center', paddingBottom: 20 }} />}
+              />
+
+            </ScrollView>
+
+
+          )}
+      </View> }
     </View>
 
   );
@@ -155,6 +246,19 @@ let styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingRight: 10
+  },
+  choice: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: 'green',
+  },
+  choiceText: {
+    fontSize: 20,
+    fontWeight: 600,
+    marginHorizontal: 30,
+    marginVertical:10
   },
   prodImg: {
     aspectRatio: 1,

@@ -70,7 +70,7 @@ export default EmailAuth = () => {
       style={{ flex: 1,height:1000}}
     >
       <View style={{paddingVertical: 10 }}>
-          <TouchableOpacity onPress={() => navigation.goBack() }>
+          <TouchableOpacity onPress={() => navigation.navigate('SignUp') }>
             <Entypo name="cross" size={28} color="black" />
           </TouchableOpacity>
 
