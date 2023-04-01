@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {
   View,
   Text,
@@ -18,6 +18,13 @@ import auth from '@react-native-firebase/auth';
 export default SignUp = () => {
   const [value, onChangeText] = React.useState("");
   const navigation = useNavigation();
+
+  useEffect(() => {    
+    if (auth()._user== true) {
+      navigation.navigate("BottomTab")
+    }
+  }, [])
+
   async function signInWithPhoneNumber(value) {
     try {
       const confirm = await auth().signInWithPhoneNumber(`+91${value}`);
@@ -39,7 +46,7 @@ export default SignUp = () => {
       style={{ flex: 1,height:1000}}
     >
       <View style={{paddingVertical: 10 }}>
-          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Entypo name="cross" size={28} color="black" />
           </TouchableOpacity>
         <Image

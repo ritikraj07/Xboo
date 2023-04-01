@@ -18,7 +18,7 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { AirbnbRating } from '@rneui/themed';
+import { AirbnbRating } from "@rneui/themed";
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
@@ -28,45 +28,22 @@ function ProductDescription({ navigation }) {
   const [wishlist, setwishlist] = React.useState(false);
   const [cartbtm, setcartbtm] = React.useState(false)
  
-  // console.log(auth()._user.uid)
   async function AddtoCart() {
-    let Auth = auth()._authResult
-    if (!Auth) {
-      Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kara phir istam kara",)
-      navigation.navigate('EmailAuth')
-    } else {
       const user = await firestore().collection(auth()._user.uid).doc('Cart').get();
       firestore()
         .collection(auth()._user.uid).doc('Cart')
         .set({ "cart": user._exists ? [...user._data?.cart, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
         .then((e) => {
-          // console.log(e);
           setcartbtm(true)
-        }).catch((e) => {
-          // console.log(e)
-
-        })
-    }
-  
+        }).catch((e) => {})
   }
   async function AddtoWishList() {
-    let Auth = auth()._authResult
-    if (!Auth) {
-      Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kara phir istam kara",)
-      navigation.navigate('EmailAuth')
-    } else {
       const user = await firestore().collection(auth()._user.uid).doc('WishList').get();
-      // console.log(user._data?.wishlist)
       firestore().collection(auth()._user.uid).doc('WishList')
         .set({ "wishlist": user._exists ? [...user._data?.wishlist, { ...item, qun: 1 }] : [{ ...item, qun: 1 }] })
-        .then((e) => {
-          // console.log(e);
-          setwishlist(true)
-        }).catch((e) => {
-          // console.log(e)
-        })
+        .then((e) => { setwishlist(true) })
+        .catch((e) => { })
     }
-  }
 
 
   return (
@@ -105,10 +82,22 @@ function ProductDescription({ navigation }) {
         </View>
       </ImageBackground>
 
-
-      <View style={{ paddingHorizontal: 15, paddingVertical: 15, backgroundColor: "white"}}>
-        <TouchableOpacity style={{ alignItems: "flex-end", paddingRight: 10 }} onPress={() => AddtoWishList()}>
-          {wishlist ? <AntDesign name="heart" size={24} color="red" /> : <AntDesign name="hearto" size={24} color="#EBEDF0" />}
+      <View
+        style={{
+          paddingHorizontal: 15,
+          paddingVertical: 15,
+          backgroundColor: "white",
+        }}
+      >
+        <TouchableOpacity
+          style={{ alignItems: "flex-end", paddingRight: 10 }}
+          onPress={() => AddtoWishList()}
+        >
+          {wishlist ? (
+            <AntDesign name="heart" size={24} color="red" />
+          ) : (
+            <AntDesign name="hearto" size={24} color="#EBEDF0" />
+          )}
         </TouchableOpacity>
         <Image
           source={{ uri: item?.image }}
@@ -190,8 +179,12 @@ function ProductDescription({ navigation }) {
         </View>
       </View>
       <View style={{ flexDirection: "row", flex: 1 }}>
-        <TouchableOpacity disabled={cartbtm} style={{ flex: 1, height: 40, paddingVertical: 10 }} onPress={()=>AddtoCart()} >
-          <Text style={{ alignSelf: "center", fontSize: 15, fontWeight: "bold", }}>{cartbtm?"Added to Cart":"Add to Cart"}</Text>
+        <TouchableOpacity onPress={()=>AddtoCart()} style={{ flex: 1, height: 40, paddingVertical: 10 }}>
+          <Text
+            style={{ alignSelf: "center", fontSize: 15, fontWeight: "bold" }}
+          >
+            {cartbtm?"Added to Cart" :"Add to Cart"}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={{

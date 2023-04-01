@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect}  from "react";
 import {
   View,
   Text,
@@ -19,7 +19,12 @@ export default EmailAuth = () => {
   const [email, onChangeText] = React.useState("");
   const [pass, onChangepass] = React.useState("");
   const navigation=useNavigation();
-
+  useEffect(() => {
+    
+    if (auth()._user == true) {
+      navigation.navigate("BottomTab")
+    }
+  }, [])
   const SignIn=()=>{
     auth()
     .createUserWithEmailAndPassword(email, pass)
@@ -33,7 +38,7 @@ export default EmailAuth = () => {
         auth().signInWithEmailAndPassword(email, pass)
           .then((res) => {
             console.log(res)
-            navigation.navigate('BottomTab')
+            navigation.navigate("BottomTab");
           }).catch((res) => {
             console(res)
           })
@@ -58,7 +63,7 @@ export default EmailAuth = () => {
       style={{ flex: 1,height:1000}}
     >
       <View style={{paddingVertical: 10 }}>
-          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+          <TouchableOpacity onPress={() => navigation.goBack() }>
             <Entypo name="cross" size={28} color="black" />
           </TouchableOpacity>
 
@@ -106,8 +111,7 @@ export default EmailAuth = () => {
             </Text>
           </View>
           <View style={styles.inputContainer}>
-        
-              <TextInput style={{ width: '100%' }} placeholder="Enter Password"  onChangeText={text => onChangepass(text)}
+              <TextInput secureTextEntry={true} style={{ width: '100%' }} placeholder="Enter Password"  onChangeText={text => onChangepass(text)}
         value={pass}/>
           </View>
         </View>

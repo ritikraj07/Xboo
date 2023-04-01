@@ -31,7 +31,7 @@ const Profile = ({ navigation }) => {
   const [address, setAddress] = useState('123 Main St, Anytown USA');
   const [editMode, setEditMode] = useState(false);
   const [profilePic, setProfilePic] = useState(null);
-  const [Auth, setAuth] = useState(null)
+  const [Auth, setAuth] = useState(false)
   const [orders, setOrders] = useState([
     { id: '1', date: '2022-01-01', total: '100.00' },
     { id: '2', date: '2022-02-01', total: '200.00' },
@@ -40,25 +40,27 @@ const Profile = ({ navigation }) => {
 
   useEffect(() => {
     let Auth = auth()._user
-    setAuth(Auth)
+    if (Auth) {
+      setAuth(true)
+    } else {
+      setAuth(false)
+    }
+    
     if (!Auth) {
       Alert.alert('XBoo!  Message', "You haven't login baby \n Pehla login kara phir istam kara",)
       navigation.navigate('EmailAuth')
     } else {
-      // firestore().collection(auth()?._user?.uid).doc('UserData').get()
-      //   .then((e) => {
-      //     // console.log(e)
-      //     setName(e._data.name)
-      //     setEmail(e._data.email)
-      //     setPhone(e._data.phone)
-      //     setAddress(e._data.address)
-      //   }).catch((e) => {
-      //     // console.log(e)
-      //   })
+      firestore().collection(auth()?._user?.uid).doc('UserData').get()
+        .then((e) => {
+          // console.log(e)
+          setName(e._data.name)
+          setEmail(e._data.email)
+          setPhone(e._data.phone)
+          setAddress(e._data.address)
+        }).catch((e) => {
+          // console.log(e)
+        })
     }
-    
-
-
   }, [])
 
   const handleChooseProfilePic = async () => {
@@ -82,6 +84,7 @@ const Profile = ({ navigation }) => {
   const handleEdit = () => {
     setEditMode(true);
   };
+  
 
   async function handleSave(){
     setEditMode(false);
@@ -94,6 +97,7 @@ const Profile = ({ navigation }) => {
         .set({ name: name, phone: phone, email: email, address: address, profilePic: profilePic })
         .then((e) => {
           // console.log(e);
+          
           setcartbtm(true)
         }).catch((e) => {
           // console.log(e)
@@ -109,22 +113,20 @@ const Profile = ({ navigation }) => {
         .signOut()
         .then(() => {
           console.log('User signed out!')
-          navigation.navigate('Home')
+          setAuth(false)
+          navigation.navigate('SignUp')
+          
         })
         .catch((e) => {
           console.log(e)
         })
     } else {
       navigation.navigate('SignUp')
+      setAuth(false)
     }
   };
 
-  const renderOrderItem = ({ item }) => (
-    <View style={styles.orderItem}>
-      <Text style={styles.orderDate}>{item.date}</Text>
-      <Text style={styles.orderTotal}>Total: ${item.total}</Text>
-    </View>
-  );
+
 
   return (
     <View style={styles.container}>
